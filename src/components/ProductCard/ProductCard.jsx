@@ -12,19 +12,24 @@ import {
 } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/cartSlice';
+import { useAuth } from '../../context/Authcontext';
 import toast from 'react-hot-toast';
 import './ProductCard.css';
 import { convertAdjustAndFormat } from '../../utils/currency';
 
 const ProductCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { user, toggleWishlist, isInWishlist } = useAuth();
   const dispatch = useDispatch();
 
   // safe defaults
-  const inStock = product.inStock !== undefined ? product.inStock : true;
+  // Prioritize numeric stock if available, otherwise fallback to boolean
+  const inStock = product.stock !== undefined ? product.stock > 0 : (product.inStock !== undefined ? product.inStock : true);
   const fastDelivery = !!product.fastDelivery;
   const tags = Array.isArray(product.tags) ? product.tags : [];
+  const lowStock = product.stock !== undefined && product.stock > 0 && product.stock < 5;
+
+  const isWishlisted = isInWishlist(product._id);
 
   const handleAddToCart = (e) => {
     // prevent Link navigation
@@ -44,11 +49,16 @@ const ProductCard = ({ product }) => {
     toast.success(`${product.name} added to cart!`);
   };
 
-  const handleWishlist = (e) => {
+  const handleWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
-    toast.success(!isWishlisted ? 'Added to wishlist!' : 'Removed from wishlist');
+    if (!user) {
+      toast.error('Please login to use wishlist');
+      return;
+    }
+    const action = await toggleWishlist(product);
+    if (action === 'added') toast.success('Added to wishlist!');
+    else if (action === 'removed') toast.success('Removed from wishlist');
   };
 
   return (
@@ -76,6 +86,7 @@ const ProductCard = ({ product }) => {
                 <span className="product-badge discount">-{product.discount}%</span>
               ) : null}
               {!inStock && <span className="product-badge out-of-stock">Out of Stock</span>}
+              {inStock && lowStock && <span className="product-badge low-stock" style={{ background: '#f59e0b' }}>Low Stock</span>}
               {tags.includes('New Arrival') && <span className="product-badge new">New</span>}
             </div>
 
@@ -90,14 +101,7 @@ const ProductCard = ({ product }) => {
                 <FiHeart />
               </button>
 
-              <button
-                className="product-card__quickview"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); /* placeholder */ }}
-                aria-label="Quick view"
-                title="Quick view"
-              >
-                <FiEye />
-              </button>
+
             </div>
           </div>
 

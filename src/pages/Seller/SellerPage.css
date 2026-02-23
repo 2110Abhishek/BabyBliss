@@ -1,0 +1,228 @@
+.seller-page {
+    padding: 40px 0;
+    min-height: 80vh;
+    background-color: #f8f9fa;
+}
+
+.seller-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.seller-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.seller-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.seller-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.seller-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.seller-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.seller-form input,
+.seller-form textarea,
+.seller-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.seller-form input:focus,
+.seller-form textarea:focus,
+.seller-form select:focus {
+    outline: none;
+    border-color: #ff9f43;
+    box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.1);
+}
+
+.form-group.row {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.form-group.row .col {
+    flex: 1;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ff9f43;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #e68d37;
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.error-banner {
+    background: #ffe3e3;
+    color: #e03131;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-message h2 {
+    margin: 1rem 0 0.5rem;
+    color: #28a745;
+}
+
+.success-message p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.success-message button {
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.success-message button.secondary {
+    background: #6c757d;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+/* Ensure table doesn't shrink too much */
+.admin-table {
+    min-width: 600px;
+    /* Force scroll on small screens */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+    /* Prevent wrapping inside cells */
+}
+
+.admin-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .seller-page {
+        padding: 1rem 0;
+    }
+
+    .seller-dashboard-content {
+        padding: 0 10px;
+    }
+
+    .seller-tabs {
+        gap: 5px !important;
+        justify-content: flex-start !important;
+        /* Start align for scrolling tabs if many */
+        overflow-x: auto;
+        padding-bottom: 5px;
+        flex-wrap: nowrap !important;
+        /* Horizontal scroll tabs */
+    }
+
+    .seller-tabs::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    .seller-tabs::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+    }
+
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        background: white;
+        white-space: nowrap;
+    }
+
+    .tab-btn.active {
+        background-color: #e3f2fd;
+        border-color: #3b82f6;
+    }
+
+    /* Stack cards */
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    /* Adjust form layouts */
+    .products-management>div {
+        grid-template-columns: 1fr !important;
+    }
+
+    .add-product-section,
+    .product-list-section {
+        width: 100%;
+    }
+
+    .product-list-section {
+        margin-top: 20px;
+    }
+}

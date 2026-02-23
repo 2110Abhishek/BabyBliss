@@ -1,16 +1,34 @@
 .header {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 2000;
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow);
 }
 
+.header .container {
+  max-width: 100%;
+  max-width: 100%;
+  padding: 0 10px;
+  /* Minimal padding for edges */
+  /* Reduced padding for mobile */
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .header .container {
+    padding: 0 2rem;
+  }
+}
+
 .header__content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  /* Center the entire group */
+  gap: 2.5rem;
+  /* Gap between Logo-Nav and Nav-Actions */
   padding: 1rem 0;
   min-height: 70px;
 }
@@ -20,6 +38,7 @@
   align-items: center;
   gap: 0.75rem;
   color: var(--primary-color);
+  /* Removed margin-right to use gap */
 }
 
 .header__logo-icon {
@@ -46,7 +65,17 @@
 .header__nav {
   display: none;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
+  /* margin: 0 auto; Removed to allow center alignment via parent */
+}
+
+.header__nav::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar for Chrome/Safari */
 }
 
 .header__nav-link {
@@ -58,6 +87,8 @@
   padding: 0.5rem 0;
   position: relative;
   transition: var(--transition);
+  white-space: nowrap;
+  /* Prevent text wrapping */
 }
 
 .header__nav-link:hover {
@@ -145,35 +176,142 @@
 }
 
 .header__search {
-  padding-bottom: 1rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem 1.5rem;
+  /* Reduced padding to fit better */
+  animation: slideDown 0.3s ease-out;
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 100px;
+  }
+}
+
+.header__search-wrapper {
+  display: flex;
+  width: 100%;
+  border: 2px solid #007bff;
+  /* Blue border */
+  border-radius: 50px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header__search-container {
   position: relative;
 }
 
-.header__search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-light);
-  font-size: 1.25rem;
-}
-
 .header__search-input {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 50px 0 0 50px;
   font-size: 1rem;
-  transition: var(--transition);
+  outline: none;
 }
 
 .header__search-input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  box-shadow: none;
+  /* Let wrapper handle focus visuals if needed */
+}
+
+.header__search-submit {
+  background-color: #007bff;
+  /* Blue background match */
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.header__search-submit:hover {
+  background-color: #0056b3;
+}
+
+/* Remove old conflicting icon styles */
+.header__search-icon {
+  display: none;
+}
+
+/* Search Suggestions */
+.header__search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 0 0 16px 16px;
+  /* Rounded bottom */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  z-index: 1000;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.header__suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header__suggestion-item:hover {
+  background-color: #f8fafc;
+}
+
+.header__suggestion-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.header__suggestion-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.header__suggestion-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.header__suggestion-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.header__suggestion-price {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 .header__mobile-menu {
@@ -187,16 +325,21 @@
   box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.4rem;
+  max-height: calc(100dvh - 70px);
+  overflow-y: auto;
+  z-index: 1000;
+  padding-bottom: 2rem;
 }
 
 .header__mobile-link {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0;
   color: var(--text-color);
   font-weight: 500;
+  font-size: 1rem;
   border-bottom: 1px solid var(--border-color);
   transition: var(--transition);
 }
@@ -223,11 +366,11 @@
   .header__nav {
     display: flex;
   }
-  
+
   .header__menu-btn {
     display: none;
   }
-  
+
   .header__mobile-menu {
     display: none;
   }
@@ -236,13 +379,62 @@
 @media (max-width: 768px) {
   .header__content {
     padding: 0.5rem 0;
+    justify-content: space-between;
+    /* Push items to edges */
   }
-  
+
+  .header__logo {
+    margin-left: 8px;
+    /* Shift logo slightly right */
+  }
+
   .header__logo-text h1 {
     font-size: 1.5rem;
   }
-  
+
   .header__actions {
-    gap: 0.5rem;
+    gap: 0.25rem;
+    /* Reduce gap */
+  }
+
+  /* Compact buttons for mobile */
+  .header__action-btn,
+  .header__menu-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+  }
+
+  .header__profile-menu-container {
+    display: none;
+  }
+}
+
+/* Extra small devices (max-width: 360px) */
+@media (max-width: 360px) {
+  .header__content {
+    gap: 0;
+    /* Remove gap between main elements */
+    padding: 0.25rem 0;
+  }
+
+  .header__actions {
+    gap: 2px;
+    /* Minimal gap between icons */
+  }
+
+  .header__logo-text h1 {
+    font-size: 1.25rem;
+    /* Smaller logo font */
+  }
+
+  .header__action-btn,
+  .header__menu-btn {
+    width: 28px;
+    /* Smaller touch target */
+    height: 28px;
+    font-size: 1rem;
+    padding: 0;
+    /* Remove padding */
   }
 }

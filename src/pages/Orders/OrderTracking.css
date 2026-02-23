@@ -1,0 +1,298 @@
+/* OrderTracking.css */
+.order-tracking-page {
+    padding: 3rem 0;
+    min-height: 80vh;
+}
+
+.tracking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-header h1 {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.back-link {
+    color: #ff6b81;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.tracking-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tracking-summary {
+    display: flex;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-item .label {
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 4px;
+}
+
+.summary-item .value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Cancelled Banner */
+.cancelled-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: #fff5f5;
+    border: 1px solid #ffc9c9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 100%;
+    color: #c92a2a;
+}
+
+.cancelled-icon {
+    color: #fa5252;
+    flex-shrink: 0;
+}
+
+.cancelled-info h3 {
+    margin: 0 0 5px 0;
+    color: #fa5252;
+}
+
+.cancelled-info p {
+    margin: 0;
+    color: #495057;
+}
+
+.refund-status {
+    margin-top: 8px;
+    font-weight: 600;
+    padding: 4px 8px;
+    background: #fff;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 0.85rem;
+    border: 1px solid #ddd;
+}
+
+.refund-status.initiated {
+    color: #f59f00;
+    border-color: #fcc419;
+    background: #fff9db;
+}
+
+.refund-status.processed {
+    color: #2b8a3e;
+    border-color: #69db7c;
+    background: #ebfbee;
+}
+
+.refund-status.failed {
+    color: #c92a2a;
+    border-color: #ff8787;
+    background: #ffe3e3;
+}
+
+/* Timeline Visualization */
+.stages-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    margin-bottom: 4rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.progress-bar-bg {
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: 1;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #2ecc71;
+    transition: width 0.5s ease;
+}
+
+.stage-item {
+    position: relative;
+    z-index: 2;
+    background: white;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.stage-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    border: 2px solid #fff;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+
+.stage-label {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 500;
+}
+
+.stage-item.completed .stage-icon,
+.stage-item.current .stage-icon {
+    background: #2ecc71;
+    color: white;
+    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+}
+
+.stage-item.completed .stage-label {
+    color: #2ecc71;
+}
+
+.stage-item.current .stage-label {
+    font-weight: 700;
+    color: #2ecc71;
+}
+
+/* History Log */
+.history-log {
+    border-left: 2px solid #eee;
+    padding-left: 2rem;
+    margin-top: 2rem;
+}
+
+.history-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.history-marker {
+    position: absolute;
+    left: -2.4rem;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background: #ff6b81;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px #eee;
+}
+
+.history-left {
+    position: absolute;
+    left: -120px;
+    width: 80px;
+    text-align: right;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.history-time {
+    font-weight: 600;
+}
+
+.history-details h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.history-details p {
+    margin: 0;
+    color: #555;
+}
+
+.history-img {
+    margin-top: 10px;
+    max-width: 100px;
+    border-radius: 8px;
+}
+
+.history-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    color: #888;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .stages-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+        padding-left: 2rem;
+    }
+
+    .progress-bar-bg {
+        width: 4px;
+        height: 100%;
+        left: 45px;
+        top: 0;
+    }
+
+    .stage-item {
+        flex-direction: row;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .progress-bar-fill {
+        width: 100% !important;
+        height: 0;
+        /* Need vertical calculation */
+    }
+
+    /* Simple vertical fallback without complexity */
+    .progress-bar-bg,
+    .progress-bar-fill {
+        display: none;
+    }
+
+    .history-left {
+        position: static;
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    .history-marker {
+        left: -2.35rem;
+    }
+}

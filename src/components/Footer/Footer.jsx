@@ -1,3 +1,4 @@
+//src/component/Footer/Footer.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiMail, FiPhone, FiMapPin, FiHeart } from 'react-icons/fi';
@@ -11,25 +12,45 @@ const Footer = () => {
           <div className="footer__section">
             <Link to="/" className="footer__logo">
               <FiHeart />
-              <span>BabyBliss</span>
+              <span>BlissBloomly</span>
             </Link>
             <p className="footer__description">
-              Premium baby products for your little one's happiness and comfort. 
+              Premium baby products for your little one's happiness and comfort.
               Quality guaranteed, smiles delivered.
             </p>
             <div className="footer__social">
-              <a href="#" className="footer__social-link">
+              <div
+                className="footer__social-link"
+                title="Coming soon"
+                style={{ cursor: 'not-allowed' }}
+                onClick={() => alert("Social pages coming soon")}
+              >
                 <FiFacebook />
-              </a>
-              <a href="#" className="footer__social-link">
+              </div>
+              <div
+                className="footer__social-link"
+                title="Coming soon"
+                style={{ cursor: 'not-allowed' }}
+                onClick={() => alert("Social pages coming soon")}
+              >
                 <FiTwitter />
-              </a>
-              <a href="#" className="footer__social-link">
+              </div>
+              <div
+                className="footer__social-link"
+                title="Coming soon"
+                style={{ cursor: 'not-allowed' }}
+                onClick={() => alert("Social pages coming soon")}
+              >
                 <FiInstagram />
-              </a>
-              <a href="#" className="footer__social-link">
+              </div>
+              <div
+                className="footer__social-link"
+                title="Coming soon"
+                style={{ cursor: 'not-allowed' }}
+                onClick={() => alert("Social pages coming soon")}
+              >
                 <FiYoutube />
-              </a>
+              </div>
             </div>
           </div>
 
@@ -39,7 +60,7 @@ const Footer = () => {
               <li><Link to="/">Home</Link></li>
               <li><Link to="/products">Shop All</Link></li>
               <li><Link to="/products?category=new">New Arrivals</Link></li>
-              <li><Link to="/products?category=sale">Best Sellers</Link></li>
+              <li><Link to="/orders">My Orders</Link></li>
               <li><Link to="/cart">Shopping Cart</Link></li>
             </ul>
           </div>
@@ -60,11 +81,11 @@ const Footer = () => {
             <ul className="footer__contact">
               <li>
                 <FiPhone />
-                <span>+91 9370165188</span>
+                <a href="tel:+919370165188">+91 9370165188</a>
               </li>
               <li>
                 <FiMail />
-                <span>support@babybliss.com</span>
+                <a href="mailto:blissbloomly@gmail.com">blissbloomly@gmail.com</a>
               </li>
               <li>
                 <FiMapPin />
@@ -75,7 +96,7 @@ const Footer = () => {
         </div>
 
         <div className="footer__bottom">
-          <p>&copy; {new Date().getFullYear()} BabyBliss. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} BlissBloomly. All rights reserved.</p>
           <div className="footer__bottom-links">
             <Link to="/privacy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>

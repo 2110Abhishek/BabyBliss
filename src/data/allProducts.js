@@ -1,3 +1,4 @@
+//src/data/allproducts.js
 import { getProductImage } from './productImages';
 
 const generateProducts = () => {
@@ -10,6 +11,7 @@ const generateProducts = () => {
     { id: 'nursery', name: 'Nursery', icon: '🛏️' },
     { id: 'safety', name: 'Safety', icon: '🛡️' },
     { id: 'travel', name: 'Travel', icon: '🚗' },
+    { id: 'tech', name: 'Tech', icon: '📱' },
   ];
 
   const productNames = {
@@ -18,7 +20,7 @@ const generateProducts = () => {
       'Baby Denim Overalls', 'Winter Jacket', 'Knit Sweaters', 'Baby Leggings',
       'Summer Dresses', 'Swimwear Set', 'Hooded Towels', 'Baby Socks Pack',
       'Winter Hats & Mittens', 'Baby Vests', 'Footed Pajamas', 'Baby Hoodies',
-      'Raincoat Set', 'Baby Jeans', 'Cardigans', 'Onesies Multipack'
+      'Raincoat Set', 'Baby Jeans'
     ],
     toys: [
       'Educational Activity Gym', 'Soft Building Blocks', 'Musical Mobile', 'Teething Toys',
@@ -32,7 +34,7 @@ const generateProducts = () => {
       'Silicone Bibs', 'Breast Pump', 'Milk Storage Bags', 'Bottle Warmer',
       'Baby Spoons Set', 'Formula Dispenser', 'Sippy Cups', 'High Chair',
       'Breastfeeding Pillow', 'Food Processors', 'Bottle Brushes', 'Milk Powder Container',
-      'Snack Cups', 'Thermos Food Jar', 'Placemats', 'Feeding Set'
+      'Snack Cups', 'Thermos Food Jar', 'Placemats'
     ],
     bath: [
       'Baby Shampoo', 'Moisturizing Lotion', 'Baby Oil', 'Bath Thermometer',
@@ -94,13 +96,13 @@ const generateProducts = () => {
   // Generate 80+ products (10 per category)
   categories.forEach(category => {
     const categoryProducts = productNames[category.id] || productNames.clothing;
-    
+
     categoryProducts.forEach(productName => {
       const price = Math.floor(Math.random() * 100) + 10;
       const discount = Math.random() > 0.5 ? Math.floor(Math.random() * 30) + 10 : 0;
       const rating = 4 + Math.random();
       const reviews = Math.floor(Math.random() * 500) + 50;
-      
+
       products.push({
         id: id++,
         name: productName,
@@ -135,4 +137,5 @@ export const categories = [
   { id: 'safety', name: 'Safety', count: allProducts.filter(p => p.categoryId === 'safety').length, icon: '🛡️' },
   { id: 'travel', name: 'Travel', count: allProducts.filter(p => p.categoryId === 'travel').length, icon: '🚗' },
   { id: 'new', name: 'New Arrivals', count: allProducts.filter(p => p.categoryId === 'new').length, icon: '🆕' },
+  { id: 'tech', name: 'Tech', count: allProducts.filter(p => p.categoryId === 'tech').length, icon: '📱' },
 ];

@@ -15,6 +15,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -34,6 +35,7 @@
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -243,18 +245,57 @@
 .cart-actions {
   display: flex;
   gap: 1rem;
+  align-items: flex-end;
+  /* Align to bottom */
 }
 
 .cart-actions .btn {
   flex: 1;
 }
 
+/* Make Clear Cart smaller */
+.cart-actions .btn-secondary {
+  padding: 1.5rem 1.2rem;
+  font-size: 1rem;
+  height: auto;
+  /* Ensure it wraps tightly */
+}
+
 @media (max-width: 768px) {
   .cart-container {
     max-width: 100%;
   }
-  
+
   .cart-actions {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: stretch;
+    /* Ensure both buttons stretch to the same height */
+  }
+
+  .cart-actions .btn {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    /* Allow height to grow */
+    box-sizing: border-box;
+    /* Include padding and border in width/height */
+    margin: 0;
+    /* Reset margin */
+    border: 1px solid transparent;
+    /* Match border size of secondary button */
+  }
+
+  /* Specific styling for the Clear Cart button to look like outline */
+  .cart-actions .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    height: auto;
+    /* Override any desktop height */
   }
 }

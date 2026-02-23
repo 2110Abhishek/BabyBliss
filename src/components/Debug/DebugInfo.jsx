@@ -1,3 +1,4 @@
+//src/components/Debug/DebugInfo.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 

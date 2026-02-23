@@ -90,6 +90,15 @@
   transform: perspective(1000px) rotateY(-10deg);
 }
 
+.hero-image img:hover {
+  transform: translateY(-5px);
+}
+
+.hero-image-offset img {
+  margin-top: 5rem;
+  /* Push down specifically for these slides */
+}
+
 .hero-dots {
   position: absolute;
   bottom: 2rem;
@@ -313,23 +322,29 @@
 .newsletter-content p {
   font-size: 1.125rem;
   color: var(--text-light);
-  margin-bottom: 2rem;
+  margin-bottom: 0;
+  /* Moved form up by 2rem as requested */
 }
 
 .newsletter-form {
-  display: flex;
-  gap: 1rem;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
+  /* Layout is handled by inline GRID style */
 }
 
 .newsletter-input {
-  flex: 1;
-  padding: 1rem 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1.25rem;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   font-size: 1rem;
   transition: var(--transition);
+  margin-top: 1.5rem;
+  /* Shift down by 1.5rem */
+  height: 50px;
+  /* Fixed height */
+  line-height: normal;
 }
 
 .newsletter-input:focus {
@@ -338,8 +353,19 @@
 }
 
 .newsletter-btn {
-  padding: 1rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  display: flex;
+  /* Flex is fine for centering content INSIDE the button */
+  align-items: center;
+  justify-content: center;
   font-weight: 600;
+  border-radius: var(--radius-lg);
+  margin: 0;
+  white-space: nowrap;
+  height: 50px;
+  /* Fixed height */
 }
 
 /* Responsive Design */
@@ -347,15 +373,15 @@
   .hero-image {
     display: flex;
   }
-  
+
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .categories-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -365,19 +391,19 @@
   .features-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .categories-grid {
     grid-template-columns: repeat(6, 1fr);
   }
-  
+
   .products-grid {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   .hero-text h1 {
     font-size: 4rem;
   }
-  
+
   .hero-text h2 {
     font-size: 2.5rem;
   }
@@ -385,32 +411,61 @@
 
 @media (max-width: 640px) {
   .hero {
-    height: 500px;
+    height: auto;
+    min-height: 480px;
+    padding-bottom: 3rem;
+    /* Space for dots */
   }
-  
+
+  .hero-content {
+    padding: 1rem 0 3rem;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero-text {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
   .hero-text h1 {
-    font-size: 2.5rem;
-  }
-  
-  .hero-text h2 {
-    font-size: 1.5rem;
-  }
-  
-  .hero-text p {
-    font-size: 1rem;
-  }
-  
-  .section-title {
     font-size: 2rem;
+    line-height: 1.2;
   }
-  
-  .newsletter-form {
-    flex-direction: column;
+
+  .hero-text h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
   }
-  
+
+  .hero-text p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    display: none;
+    /* Hide paragraph on very small screens if needed to save space, or keep it small */
+  }
+
+  /* Show paragraph but keep it compact */
+  .hero-text p {
+    display: block;
+    font-size: 0.9rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  /* .newsletter-form { flex-direction: column; } removed to keep side-by-side */
+  /* .newsletter-input { width: 100%; } removed */
+
   .hero-btn {
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    width: fit-content;
+    margin: 0 auto;
   }
 }
 
@@ -488,11 +543,11 @@
   .reasons-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .reason {
     padding: 1.5rem;
   }
-  
+
   .reason-number {
     font-size: 2.5rem;
   }
@@ -510,6 +565,7 @@
     grid-template-columns: 1fr;
   }
 }
+
 /* Why Choose Section */
 .why-choose {
   padding: 4rem 0;
@@ -584,13 +640,17 @@
   .reasons-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .reason {
     padding: 1.5rem;
   }
-  
+
   .reason-number {
     font-size: 2.5rem;
+  }
+
+  .hero-dots {
+    display: none;
   }
 }
 
@@ -606,6 +666,7 @@
     grid-template-columns: 1fr;
   }
 }
+
 /* Home.css additions */
 .category-card {
   display: flex;
@@ -672,7 +733,7 @@
 
 /* Small/card-style hero image for specific slides */
 .hero-image-small {
-  display: flex;                 /* ensure it shows on desktop */
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 1.5rem;
@@ -680,24 +741,22 @@
 
 /* Card-like image styling (desktop) */
 .hero-image-small img {
-  width: 520px;                  /* card width on large screens */
+  width: 520px;
   max-width: calc(100% - 48px);
   height: auto;
   border-radius: 18px;
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18);
   object-fit: cover;
-  transform: none;               /* remove the perspective rotate used for other hero images */
+  transform: none;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
   display: block;
 }
 
-/* Slight lift on hover */
 .hero-image-small img:hover {
   transform: translateY(-6px);
   box-shadow: 0 28px 56px rgba(15, 23, 42, 0.22);
 }
 
-/* Make the small image more compact on medium screens */
 @media (max-width: 1024px) {
   .hero-image-small img {
     width: 420px;
@@ -706,7 +765,93 @@
 
 /* On small screens hide the hero image (keeps hero text readable) */
 @media (max-width: 767px) {
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 2rem;
+  }
+
+  .hero-text {
+    display: contents;
+    /* Un-nest children */
+  }
+
+  /* Reorder elements */
+  .hero-text h1 {
+    order: 1;
+  }
+
+  .hero-text h2 {
+    order: 2;
+    margin-bottom: 1rem;
+  }
+
+  .hero-text p {
+    order: 3;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
   .hero-image {
-    display: none;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    order: 4;
+    /* Image in middle */
+    margin: 0 0 1.5rem 0;
+  }
+
+  .hero-image img {
+    max-width: 280px;
+    max-height: 200px;
+    object-fit: contain;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .hero-text>div:last-child {
+    /* The button wrapper */
+    order: 5;
+    /* Button at bottom */
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Specific tweaks for Summer/Tech slides to move image up */
+  .hero-slide.hero-image-offset .hero-image {
+    margin-bottom: 1rem;
+    /* Add buffer so button doesn't follow */
+    margin-top: -4.9rem;
+    /* Move image up another 1rem (total -4.5rem) */
+  }
+
+  /* Ensure button is visible for offset slides too */
+  .hero-slide.hero-image-offset .hero-text>div:last-child {
+    display: block !important;
+    order: 5;
+  }
+}
+
+
+/* Extra small devices (360px and below) */
+@media (max-width: 380px) {
+  .hero-content {
+    padding: 1rem 0 2rem;
+  }
+
+  .hero-text h1 {
+    font-size: 1.75rem;
+    /* Smaller title */
+  }
+
+  .hero-text h2 {
+    font-size: 1.1rem;
+    /* Smaller subtitle */
+  }
+
+  .hero-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
   }
 }

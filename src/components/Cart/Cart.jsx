@@ -9,7 +9,7 @@ import { convertAdjustAndFormat } from '../../utils/currency';
 
 const Cart = ({ isCartOpen, setIsCartOpen }) => {
   const dispatch = useDispatch();
-  const { items, total } = useSelector(state => state.cart);
+  const { items, total, shipping } = useSelector(state => state.cart);
 
   const handleCloseCart = () => {
     setIsCartOpen(false);
@@ -31,7 +31,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
     return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   };
 
-  const shipping = 5.99; // USD shipping base
+  // Shipping is now handled in Redux
   const grandTotalUSD = calculateSubtotal() + shipping;
 
   if (!isCartOpen) return null;
@@ -59,11 +59,11 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
           <>
             <div className="cart-items">
               {items.map((item) => (
-                <div key={item.id} className="cart-item">
+                <div key={item.cartId || item.id} className="cart-item">
                   <div className="cart-item-image">
-                    <img 
-                      src={item.image || 'https://via.placeholder.com/80x80/f0f9ff/0ea5e9?text=Baby'} 
-                      alt={item.name} 
+                    <img
+                      src={item.image || 'https://via.placeholder.com/80x80/f0f9ff/0ea5e9?text=Baby'}
+                      alt={item.name}
                     />
                   </div>
                   <div className="cart-item-details">
@@ -73,26 +73,23 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
                   </div>
                   <div className="cart-item-controls">
                     <div className="quantity-controls">
-                      <button 
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                      <button
+                        onClick={() => handleUpdateQuantity(item.cartId || item.id, item.quantity - 1)}
                         className="quantity-btn"
+                        disabled={item.quantity <= 1}
                       >
                         <FiMinus />
                       </button>
                       <span className="quantity">{item.quantity}</span>
-                      <button 
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                      <button
+                        onClick={() => handleUpdateQuantity(item.cartId || item.id, item.quantity + 1)}
                         className="quantity-btn"
+                        disabled={item.quantity >= item.stock}
                       >
                         <FiPlus />
                       </button>
                     </div>
-                    <button 
-                      onClick={() => handleRemoveItem(item.id)}
-                      className="remove-btn"
-                    >
-                      <FiTrash2 />
-                    </button>
+
                   </div>
                 </div>
               ))}
@@ -115,14 +112,14 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
               </div>
 
               <div className="cart-actions">
-                <button 
+                <button
                   className="btn btn-secondary"
                   onClick={handleClearCart}
                 >
                   Clear Cart
                 </button>
-                <Link 
-                  to="/checkout" 
+                <Link
+                  to="/checkout"
                   className="btn btn-primary"
                   onClick={handleCloseCart}
                 >

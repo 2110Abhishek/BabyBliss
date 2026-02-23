@@ -1,273 +1,320 @@
 // src/pages/Products/Products.jsx
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-// removed unused 'motion' to satisfy eslint no-unused-vars
-import ProductCard from '../../components/ProductCard/ProductCard';
-import { allProducts, categories as allCategories } from '../../data/allProducts';
-import { FiFilter, FiGrid, FiList, FiChevronDown, FiStar, FiTrendingUp, FiClock, FiX } from 'react-icons/fi';
-import './Products.css';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FiGrid, FiList, FiFilter, FiChevronDown, FiShoppingBag, FiStar } from 'react-icons/fi';
+import { FaTshirt, FaBaby, FaGamepad, FaUtensils, FaBath, FaBed, FaShieldAlt, FaCar, FaMobile } from 'react-icons/fa';
+import api from '../../api/api';
 import { convertAdjustAndFormat } from '../../utils/currency';
+import './Products.css';
+
+import Pagination from '../../components/Pagination';
 
 const Products = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
 
-  // Parse query parameters
-  const getCategoryFromURL = () => {
-    const params = new URLSearchParams(location.search);
-    return params.get('category') || 'all';
-  };
+  const activeCategory = params.get('category') || '';
+  const activeSort = params.get('sort') || '';
+  const searchQuery = params.get('q');
+  const minPriceParam = params.get('minPrice') || '';
+  const maxPriceParam = params.get('maxPrice') || '';
+  const ratingParam = params.get('rating') || '';
+  const pageParam = parseInt(params.get('page')) || 1;
 
-  // Initialize state from URL
-  const [selectedCategory, setSelectedCategory] = useState(getCategoryFromURL());
-  const [priceRange, setPriceRange] = useState([0, 200]); // USD-based filter values
-  const [sortBy, setSortBy] = useState('featured');
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState('grid');
-  const [showFilters, setShowFilters] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Keep categories stable between renders
-  const categories = useMemo(() => {
-    return allCategories.map(cat => ({
-      ...cat,
-      count:
-        cat.id === 'all'
-          ? allProducts.length
-          : allProducts.filter(p => p.category.toLowerCase() === cat.name.toLowerCase()).length
-    }));
-  }, []);
+  // Filter State
+  const [priceRange, setPriceRange] = useState({ min: minPriceParam, max: maxPriceParam });
+  const [minRating, setMinRating] = useState(ratingParam);
 
-  // Update selectedCategory when the URL changes (so back/forward browser works)
+  const [categoryCounts, setCategoryCounts] = useState({ all: 0, boys: 0, girls: 0, clothing: 0, toys: 0, feeding: 0, bath: 0, tech: 0, new: 0, nursery: 0 });
+
+  /* Fetch Data */
   useEffect(() => {
-    const cat = getCategoryFromURL();
-    if (cat !== selectedCategory) setSelectedCategory(cat);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const productParams = {
+          page: pageParam,
+          limit: 12 // Adjust based on design preference
+        };
+        if (activeCategory && activeCategory !== 'all') productParams.category = activeCategory;
+        if (searchQuery) productParams.q = searchQuery;
+        if (activeSort) productParams.sort = activeSort;
+        if (minPriceParam) productParams.minPrice = minPriceParam;
+        if (maxPriceParam) productParams.maxPrice = maxPriceParam;
+        if (ratingParam) productParams.rating = ratingParam;
 
-  const computeFilteredProducts = useCallback(() => {
-    let filtered = [...allProducts];
+        const res = await api.get('/products', { params: productParams });
 
-    if (selectedCategory && selectedCategory !== 'all') {
-      const categoryName = categories.find(c => c.id === selectedCategory)?.name;
-      if (categoryName) {
-        filtered = filtered.filter(product =>
-          product.category.toLowerCase() === categoryName.toLowerCase()
-        );
+        // Handle both old array format (fallback) and new object format
+        if (Array.isArray(res.data)) {
+          setProducts(res.data);
+          setTotalPages(1);
+          setCurrentPage(1);
+        } else {
+          setProducts(res.data.products || []);
+          setTotalPages(res.data.totalPages || 1);
+          setCurrentPage(res.data.currentPage || 1);
+          setTotalProducts(res.data.totalProducts || 0);
+
+          if (res.data.categoryCounts) {
+            setCategoryCounts(res.data.categoryCounts);
+          }
+        }
+
+      } catch (err) {
+        console.error('Failed to load data', err);
+      } finally {
+        setLoading(false);
       }
-    }
+    };
 
-    filtered = filtered.filter(product =>
-      product.price >= priceRange[0] && product.price <= priceRange[1]
-    );
+    loadData();
+    setMobileFiltersOpen(false);
+  }, [activeCategory, searchQuery, activeSort, minPriceParam, maxPriceParam, ratingParam, pageParam]);
 
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        case 'rating':
-          return (b.rating || 0) - (a.rating || 0);
-        case 'newest':
-          return (b.id || 0) - (a.id || 0);
-        default:
-          return (b.rating || 0) - (a.rating || 0);
-      }
+  /* Handlers */
+  const updateParams = (newParams) => {
+    const searchParams = new URLSearchParams(location.search);
+    Object.entries(newParams).forEach(([key, value]) => {
+      if (value) searchParams.set(key, value);
+      else searchParams.delete(key);
     });
-
-    return filtered;
-  }, [selectedCategory, priceRange, sortBy, categories]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      const filtered = computeFilteredProducts();
-      setFilteredProducts(filtered);
-      setIsLoading(false);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [computeFilteredProducts]);
-
-  const handleCategorySelect = (categoryId) => {
-    if (categoryId === 'all') {
-      navigate('/products', { replace: true });
-    } else {
-      navigate(`/products?category=${categoryId}`, { replace: true });
+    // Reset to page 1 on filter change, unless page explicitly changed
+    if (!newParams.page) {
+      searchParams.set('page', 1);
     }
-    setSelectedCategory(categoryId);
-    setShowFilters(false);
+    navigate(`${location.pathname}?${searchParams.toString()}`);
   };
 
-  const handlePriceChange = (min, max) => {
-    setPriceRange([min, max]);
+  const handlePageChange = (newPage) => {
+    updateParams({ page: newPage });
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+
+  const handleSortChange = (e) => {
+    updateParams({ sort: e.target.value });
+  };
+
+  const handleCategoryClick = (catId) => {
+    updateParams({ category: catId === 'all' ? '' : catId });
+  };
+
+  const applyFilters = () => {
+    updateParams({
+      minPrice: priceRange.min,
+      maxPrice: priceRange.max,
+      rating: minRating
+    });
   };
 
   const clearFilters = () => {
-    setSelectedCategory('all');
-    setPriceRange([0, 200]);
-    setSortBy('featured');
-    navigate('/products', { replace: true });
-    setShowFilters(false);
+    setPriceRange({ min: '', max: '' });
+    setMinRating('');
+    navigate('/products');
   };
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading products...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="products-page">
       <div className="container">
-        <div className="page-header">
-          <h1>
-            {selectedCategory === 'all'
-              ? 'All Baby Products'
-              : categories.find(c => c.id === selectedCategory)?.name || 'Products'}
-          </h1>
-          <p>Found {filteredProducts.length} products for your little one</p>
-        </div>
 
         <div className="products-layout">
-          <aside className={`products-filters ${showFilters ? 'show' : ''}`}>
+          {/* Sidebar */}
+          <aside className={`products-filters ${mobileFiltersOpen ? 'show' : ''}`}>
             <div className="filters-header">
-              <h3>
-                <FiFilter />
-                Filters
-              </h3>
-              <button className="close-filters" onClick={() => setShowFilters(false)} aria-label="Close filters">
-                <FiX />
+              <h3><FiFilter /> Filters</h3>
+              <button
+                className="close-filters"
+                onClick={() => setMobileFiltersOpen(false)}
+              >
+                &times;
               </button>
             </div>
 
-            {(selectedCategory !== 'all' || priceRange[0] > 0 || priceRange[1] < 200) && (
-              <div className="active-filters">
-                <div className="active-filters-header">
-                  <span>Active Filters:</span>
-                  <button onClick={clearFilters} className="clear-all-btn">Clear All</button>
-                </div>
-                <div className="filter-tags">
-                  {selectedCategory !== 'all' && (
-                    <span className="filter-tag">
-                      Category: {categories.find(c => c.id === selectedCategory)?.name}
-                      <button onClick={() => handleCategorySelect('all')}>×</button>
-                    </span>
-                  )}
-                  {(priceRange[0] > 0 || priceRange[1] < 200) && (
-                    <span className="filter-tag">
-                      Price: {convertAdjustAndFormat(priceRange[0])} - {convertAdjustAndFormat(priceRange[1])}
-                      <button onClick={() => setPriceRange([0, 200])}>×</button>
-                    </span>
-                  )}
-                </div>
+            {/* Price Filter */}
+            <div className="filter-section">
+              <h4>Price Range</h4>
+              <div className="price-inputs" style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={priceRange.min}
+                  onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+                  style={{ width: '100%', padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
+                />
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={priceRange.max}
+                  onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+                  style={{ width: '100%', padding: '5px', borderRadius: '4px', border: '1px solid #ddd' }}
+                />
               </div>
-            )}
+              <button
+                onClick={applyFilters}
+                style={{ width: '100%', padding: '8px', background: '#333', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              >
+                Apply Price
+              </button>
+            </div>
+
+
 
             <div className="filter-section">
               <h4>Categories</h4>
               <div className="category-list">
-                {categories.map(category => (
-                  <button key={category.id} className={`category-item ${selectedCategory === category.id ? 'active' : ''}`} onClick={() => handleCategorySelect(category.id)}>
-                    <span className="category-icon">{category.icon}</span>
-                    <span className="category-name">{category.name}</span>
-                    <span className="category-count">({category.count})</span>
-                  </button>
-                ))}
+                <button className={`category-item ${!activeCategory || activeCategory === 'all' ? 'active' : ''}`} onClick={() => handleCategoryClick('all')}><span className="category-icon"><FiShoppingBag /></span><span className="category-name">All Products ({categoryCounts.all})</span></button>
+                <button className={`category-item ${activeCategory === 'boys' ? 'active' : ''}`} onClick={() => handleCategoryClick('boys')}><span className="category-icon"><FaBaby /></span><span className="category-name">Boys ({categoryCounts.boys})</span></button>
+                <button className={`category-item ${activeCategory === 'girls' ? 'active' : ''}`} onClick={() => handleCategoryClick('girls')}><span className="category-icon"><FaBaby /></span><span className="category-name">Girls ({categoryCounts.girls})</span></button>
+                <button className={`category-item ${activeCategory === 'clothing' ? 'active' : ''}`} onClick={() => handleCategoryClick('clothing')}><span className="category-icon"><FaTshirt /></span><span className="category-name">Clothing ({categoryCounts.clothing})</span></button>
+                <button className={`category-item ${activeCategory === 'toys' ? 'active' : ''}`} onClick={() => handleCategoryClick('toys')}><span className="category-icon"><FaGamepad /></span><span className="category-name">Toys ({categoryCounts.toys})</span></button>
+                <button className={`category-item ${activeCategory === 'feeding' ? 'active' : ''}`} onClick={() => handleCategoryClick('feeding')}><span className="category-icon"><FaUtensils /></span><span className="category-name">Feeding ({categoryCounts.feeding})</span></button>
+                <button className={`category-item ${activeCategory === 'bath' ? 'active' : ''}`} onClick={() => handleCategoryClick('bath')}><span className="category-icon"><FaBath /></span><span className="category-name">Bath & Care ({categoryCounts.bath})</span></button>
+                <button className={`category-item ${activeCategory === 'nursery' ? 'active' : ''}`} onClick={() => handleCategoryClick('nursery')}><span className="category-icon"><FaBed /></span><span className="category-name">Nursery ({categoryCounts.nursery || 0})</span></button>
+                <button className={`category-item ${activeCategory === 'tech' ? 'active' : ''}`} onClick={() => handleCategoryClick('tech')}><span className="category-icon"><FaMobile /></span><span className="category-name">Tech ({categoryCounts.tech})</span></button>
+                <button className={`category-item ${activeCategory === 'new' ? 'active' : ''}`} onClick={() => handleCategoryClick('new')}><span className="category-icon"><FiStar /></span><span className="category-name">New Arrivals ({categoryCounts.new})</span></button>
               </div>
             </div>
 
-            <div className="filter-section">
-              <h4>Price Range</h4>
-              <div className="price-filter">
-                <div className="price-inputs">
-                  <input type="number" min="0" max="200" value={priceRange[0]} onChange={(e) => handlePriceChange(parseInt(e.target.value) || 0, priceRange[1])} className="price-input" placeholder="Min" />
-                  <span>to</span>
-                  <input type="number" min="0" max="200" value={priceRange[1]} onChange={(e) => handlePriceChange(priceRange[0], parseInt(e.target.value) || 200)} className="price-input" placeholder="Max" />
-                </div>
-                <div className="slider-container">
-                  <input type="range" min="0" max="200" step="5" value={priceRange[0]} onChange={(e) => handlePriceChange(parseInt(e.target.value), priceRange[1])} className="price-slider" />
-                  <input type="range" min="0" max="200" step="5" value={priceRange[1]} onChange={(e) => handlePriceChange(priceRange[0], parseInt(e.target.value))} className="price-slider" />
-                </div>
-                <div className="price-display">
-                  <span>{convertAdjustAndFormat(priceRange[0])}</span>
-                  <span>{convertAdjustAndFormat(priceRange[1])}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="filter-section">
-              <h4>Sort By</h4>
-              <div className="sort-options">
-                <button className={`sort-option ${sortBy === 'featured' ? 'active' : ''}`} onClick={() => setSortBy('featured')}><FiStar />Featured</button>
-                <button className={`sort-option ${sortBy === 'price-low' ? 'active' : ''}`} onClick={() => setSortBy('price-low')}>Price: Low to High</button>
-                <button className={`sort-option ${sortBy === 'price-high' ? 'active' : ''}`} onClick={() => setSortBy('price-high')}>Price: High to Low</button>
-                <button className={`sort-option ${sortBy === 'rating' ? 'active' : ''}`} onClick={() => setSortBy('rating')}><FiTrendingUp />Top Rated</button>
-                <button className={`sort-option ${sortBy === 'newest' ? 'active' : ''}`} onClick={() => setSortBy('newest')}><FiClock />Newest</button>
-              </div>
-            </div>
+            <button onClick={clearFilters} style={{ marginTop: '20px', width: '100%', padding: '10px', background: '#e5e7eb', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Reset Filters</button>
           </aside>
 
+          {/* Main Content */}
           <main className="products-main">
+            {/* Context bar inside main area per design */}
             <div className="products-header">
               <div className="products-info">
                 <h2>
-                  {selectedCategory === 'all' ? 'All Products' : categories.find(c => c.id === selectedCategory)?.name || 'Products'}
-                  <span className="product-count"> ({filteredProducts.length} products)</span>
+                  {(() => {
+                    const categoryMap = {
+                      'new': 'New Arrivals',
+                      'clothing': 'Clothing',
+                      'toys': 'Toys',
+                      'feeding': 'Feeding',
+                      'bath': 'Bath & Care',
+                      'nursery': 'Nursery',
+                      'safety': 'Safety',
+                      'tech': 'Tech',
+                      'travel': 'Travel',
+                      'boys': 'Boys',
+                      'girls': 'Girls'
+                    };
+                    if (activeCategory === 'all' || !activeCategory) return 'All Products';
+                    return categoryMap[activeCategory] || activeCategory;
+                  })()}
+                  <span className="product-count"> ({totalProducts} products)</span>
                 </h2>
-                <button className="mobile-filter-btn" onClick={() => setShowFilters(!showFilters)}><FiFilter />Filters</button>
               </div>
 
               <div className="products-controls">
+                <button
+                  className="mobile-filter-btn"
+                  onClick={() => setMobileFiltersOpen(true)}
+                >
+                  Filters
+                </button>
+
                 <div className="view-toggle">
-                  <button className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`} onClick={() => setViewMode('grid')}><FiGrid /></button>
-                  <button className={`view-btn ${viewMode === 'list' ? 'active' : ''}`} onClick={() => setViewMode('list')}><FiList /></button>
+                  <button
+                    className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    onClick={() => setViewMode('grid')}
+                  >
+                    <FiGrid />
+                  </button>
+                  <button
+                    className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
+                    onClick={() => setViewMode('list')}
+                  >
+                    <FiList />
+                  </button>
                 </div>
 
                 <div className="sort-select">
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="sort-dropdown">
-                    <option value="featured">Sort by: Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Customer Rating</option>
+                  <select
+                    className="sort-dropdown"
+                    value={activeSort}
+                    onChange={handleSortChange}
+                  >
+                    <option value="">Sort by: Featured</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
                     <option value="newest">Newest Arrivals</option>
+                    <option value="popularity">Popularity</option>
                   </select>
                   <FiChevronDown className="dropdown-icon" />
                 </div>
               </div>
             </div>
 
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="loading-products">
+                <div className="loading-spinner"></div>
+                <p>Loading Products...</p>
+              </div>
+            ) : products.length === 0 ? (
               <div className="no-products">
-                <div className="no-products-content">
-                  <h3>No products found</h3>
-                  <p>Try adjusting your filters or browse all products</p>
-                  <button className="btn btn-primary" onClick={clearFilters}>View All Products</button>
-                </div>
+                <h3>No Products Found</h3>
+                <p>Try adjusting your filters.</p>
+                <button
+                  className="login-btn"
+                  onClick={clearFilters}
+                >
+                  Clear Filters
+                </button>
               </div>
             ) : (
-              <>
-                <div className={`products-container ${viewMode}`}>
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
-                </div>
+              <div className={`products-container ${viewMode}`}>
+                {products.map(product => (
+                  <Link
+                    key={product.id}
+                    to={`/product/${product.id}`}
+                    className="product-card"
+                  >
+                    <div className="product-image-wrapper">
+                      {/* Show NEW badge if product is new */}
+                      {product.tags && product.tags.includes('New Arrival') && (
+                        <span className="badge new">NEW</span>
+                      )}
+                      <img src={product.image} alt={product.name} loading="lazy" />
+                    </div>
+                    <div className="product-info">
+                      <h3>{product.name}</h3>
+                      {/* Real Rating */}
+                      <div className="product-rating">
+                        {'★'.repeat(Math.round(product.rating || 0))}
+                        <span style={{ color: '#ccc' }}>{'★'.repeat(5 - Math.round(product.rating || 0))}</span>
+                        <span className="review-count">({product.reviews || 0})</span>
+                      </div>
 
-                <div className="pagination">
-                  <button className="pagination-btn disabled">← Previous</button>
-                  <div className="page-numbers">
-                    <button className="page-number active">1</button>
-                    <button className="page-number">2</button>
-                    <button className="page-number">3</button>
-                    <span className="page-dots">...</span>
-                    <button className="page-number">10</button>
-                  </div>
-                  <button className="pagination-btn">Next →</button>
-                </div>
-              </>
+                      <div className="product-meta">
+                        <span className="price">{convertAdjustAndFormat(product.price)}</span>
+                        {viewMode === 'list' && (
+                          <div className="list-actions">
+                            <span className="tag-stock">{product.stock > 0 ? 'In Stock' : 'Out of Stock'}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+            {products.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             )}
           </main>
         </div>

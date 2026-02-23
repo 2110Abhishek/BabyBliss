@@ -1,0 +1,239 @@
+/* Modern Notification Dropdown Styles */
+.modern-notification-dropdown {
+    position: absolute;
+    top: 100%;
+    margin-top: -2px;
+    /* Spacing from bell */
+    right: -80px;
+    /* Align nicer with header */
+    width: 380px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    border: 1px solid #f0f0f0;
+    /* overflow: hidden; -- Remove this so collapse can work if we animate height, or keep it */
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    color: #1f2937;
+    transition: height 0.3s ease;
+}
+
+.notif-header-modern {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f3f4f6;
+    background: #fff;
+}
+
+.notif-header-modern h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: #111827;
+}
+
+.notif-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mark-read-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #4f46e5;
+    background: none;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.1s;
+}
+
+.mark-read-btn:hover {
+    background: #eef2ff;
+}
+
+.double-tick {
+    display: flex;
+    color: #2563eb;
+    /* Blue color */
+}
+
+.double-tick svg {
+    margin-left: -4px;
+    /* overlap slightly */
+}
+
+.double-tick svg:first-child {
+    margin-left: 0;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.notif-content-scroll {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+/* Scrollbar styling */
+.notif-content-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notif-content-scroll::-webkit-scrollbar-track {
+    background: #f9fafb;
+}
+
+.notif-content-scroll::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 3px;
+}
+
+.notif-group {
+    padding-top: 12px;
+}
+
+.group-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    padding: 0 20px 8px;
+    margin: 0;
+}
+
+.notif-card {
+    padding: 16px 20px;
+    display: flex;
+    gap: 16px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid #f9fafb;
+}
+
+.notif-card:hover {
+    background: #f9fafb;
+}
+
+.notif-card.unread {
+    background: #fff;
+    /* Keep white but dot indicates unread */
+}
+
+.notif-card.unread:hover {
+    background: #f8fafc;
+}
+
+.notif-left {
+    flex-shrink: 0;
+    position: relative;
+}
+
+.notif-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.notif-icon-wrapper.order {
+    background: #e0e7ff;
+    color: #4f46e5;
+}
+
+.notif-icon-wrapper.chat {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.notif-icon-wrapper.alert {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.notif-icon-wrapper.default {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.notif-details {
+    flex: 1;
+}
+
+.notif-text {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #374151;
+    margin: 0 0 6px;
+}
+
+.notif-title-text {
+    font-weight: 700;
+    color: #111827;
+}
+
+.notif-timestamp {
+    font-size: 12px;
+    color: #9ca3af;
+    display: block;
+}
+
+.unread-dot {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.read-status {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    color: #2563eb;
+    /* Blue */
+    font-size: 14px;
+}
+
+.read-status .tick-2 {
+    margin-left: -8px;
+    /* overlap */
+}
+
+.empty-state {
+    padding: 40px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .modern-notification-dropdown {
+        width: 300px;
+        right: -60px;
+    }
+}

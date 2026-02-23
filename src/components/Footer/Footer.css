@@ -92,6 +92,16 @@
   color: #d1d5db;
 }
 
+.footer__contact a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer__contact a:hover {
+  color: var(--primary-color);
+}
+
 .footer__contact svg {
   color: var(--primary-color);
   flex-shrink: 0;
@@ -128,7 +138,7 @@
   .footer__content {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .footer__bottom {
     flex-direction: row;
     justify-content: space-between;

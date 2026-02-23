@@ -1,6 +1,47 @@
 class PushNotificationService {
   constructor() {
-    this.publicVapidKey = 'BLMeYQh3F7jR4X8e0KJwN2z6pL9qT1vC5sD8gH2iB4nM7xR0yV3uA6tW9oP1lZ4cF8';
+    this.publicVapidKey = 'BOIjVJ4YzjQb3lxyEiosjABJnfdtyfwpzuof4XZW1UbtZpDynfigAHAXP2TzLMd6iFNkFpOALvYGGhV_9q5Evus';
+  }
+
+  // ... (keep requestPermission and sendNotification same) ...
+
+  async subscribeToPush() {
+    if (!('serviceWorker' in navigator)) {
+      return null;
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: this.urlBase64ToUint8Array(this.publicVapidKey)
+      });
+
+      localStorage.setItem('pushSubscription', JSON.stringify(subscription));
+
+      // Sync with backend
+      await this.syncSubscription(subscription);
+
+      return subscription;
+    } catch (error) {
+      console.error('Failed to subscribe to push:', error);
+      return null;
+    }
+  }
+
+  async syncSubscription(subscription) {
+    try {
+      await fetch('https://blissbloomlybackend.onrender.com/api/notifications/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(subscription)
+      });
+      console.log('Subscription synced with backend');
+    } catch (error) {
+      console.error('Failed to sync subscription:', error);
+    }
   }
 
   async requestPermission() {
@@ -25,9 +66,9 @@ class PushNotificationService {
 
     try {
       const registration = await navigator.serviceWorker.ready;
-      
+
       await registration.showNotification(title, {
-        body: options.body || 'New update from BabyBliss!',
+        body: options.body || 'New update from BlissBloomly!',
         icon: '/icons/icon-192x192.png',
         badge: '/icons/icon-96x96.png',
         vibrate: [200, 100, 200],
@@ -69,7 +110,7 @@ class PushNotificationService {
       });
 
       localStorage.setItem('pushSubscription', JSON.stringify(subscription));
-      
+
       return subscription;
     } catch (error) {
       console.error('Failed to subscribe to push:', error);
@@ -95,7 +136,7 @@ class PushNotificationService {
   sendDemoNotification(type = 'welcome') {
     const notifications = {
       welcome: {
-        title: '👋 Welcome to BabyBliss!',
+        title: '👋 Welcome to BlissBloomly!',
         body: 'Get 15% off on your first order!',
         data: { type: 'promo', discount: 15 }
       },

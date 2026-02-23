@@ -1,0 +1,74 @@
+.blocked-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.blocked-container {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.blocked-icon {
+    font-size: 4rem;
+    color: #ef4444;
+    margin-bottom: 20px;
+}
+
+.blocked-container h1 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.blocked-container p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.blocked-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.blocked-actions .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.blocked-actions .btn:hover {
+    transform: translateY(-2px);
+}
+
+.blocked-actions .btn-primary {
+    background: #ef4444;
+    color: white;
+}
+
+.blocked-actions .btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.support-text {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin-bottom: 0 !important;
+}

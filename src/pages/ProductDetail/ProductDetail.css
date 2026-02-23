@@ -1,5 +1,51 @@
+/* Back Button Styling */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  background-color: transparent;
+  color: var(--text-color);
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+  box-shadow: none;
+}
+
+.loading-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color, #333);
+}
+
+.back-btn:hover {
+  background-color: var(--bg-light);
+  transform: translateX(-5px);
+  color: var(--primary-color);
+  box-shadow: none;
+}
+
+
+
 .product-detail-page {
-  padding: 2rem 0;
+  padding: 0 0 2rem 0;
+  /* Remove top padding */
+  margin-top: -1rem;
+  /* Pull up to counteract main-content padding */
 }
 
 .product-detail {
@@ -7,13 +53,33 @@
   flex-direction: column;
   gap: 2rem;
   background: white;
-  padding: 2rem;
+  padding: 1.5rem;
+  /* Compact padding */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
 }
 
 .product-image {
   width: 100%;
+  height: 500px;
+  /* Fixed height for consistency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Center vertically and horizontally */
+  background-color: white;
+  /* Clean background for transparent images */
+  border-radius: var(--radius);
+  overflow: hidden;
+  /* Ensure image doesn't overflow corners */
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* Ensure image fits without distortion */
+  border-radius: var(--radius);
 }
 
 .image-placeholder {
@@ -29,32 +95,53 @@
 
 .product-info h1 {
   color: var(--primary-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+  /* Tighter spacing */
+  font-size: 1.8rem;
+  /* Slightly smaller title */
 }
 
 .product-price {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: bold;
   color: var(--primary-color);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .product-description {
   color: var(--text-light);
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
 }
 
 @media (min-width: 768px) {
   .product-detail {
     flex-direction: row;
+    align-items: flex-start;
+    /* Align top */
   }
-  
-  .product-image {
+
+  .product-gallery-wrapper {
     flex: 1;
+    position: sticky;
+    /* Keep image in view if description is long */
+    top: 2rem;
   }
-  
+
   .product-info {
     flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail-page {
+    margin-top: 0;
+    /* Move up slightly */
+  }
+
+  .product-image {
+    height: 350px;
+    /* Smaller height on mobile */
   }
 }
