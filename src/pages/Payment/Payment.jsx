@@ -70,7 +70,6 @@ const Payment = () => {
                 description: "Purchase of Baby Products",
                 // image: window.location.origin + "/logo192.png", // Commented out to fix Mixed Content Error on Localhost (HTTP vs HTTPS)
                 order_id: order.id,
-                callback_url: "https://blissbloomlybackend.onrender.com/api/payment/verify-payment", // Fallback
                 handler: async function (response) {
                     try {
                         // 4. Verify Payment
