@@ -74,6 +74,9 @@
     border-radius: 8px;
     position: relative;
     transition: all 0.2s;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .address-card.default {
