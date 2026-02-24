@@ -649,7 +649,9 @@
     font-size: 2.5rem;
   }
 
-  /* Removing display: none for hero-dots to show them on mobile */
+  .hero-dots {
+    bottom: 1rem;
+  }
 }
 
 /* Category Grid Responsive */
