@@ -298,3 +298,8 @@
         overflow: hidden;
     }
 }
+
+/* Hide chatbot globally when cart is open */
+body.cart-open .chatbot-wrapper {
+    display: none !important;
+}

@@ -1,5 +1,5 @@
 // src/components/Cart/Cart.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FiTrash2, FiPlus, FiMinus, FiShoppingBag } from 'react-icons/fi';
@@ -10,6 +10,15 @@ import { convertAdjustAndFormat } from '../../utils/currency';
 const Cart = ({ isCartOpen, setIsCartOpen }) => {
   const dispatch = useDispatch();
   const { items, total, shipping } = useSelector(state => state.cart);
+
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.classList.add('cart-open');
+    } else {
+      document.body.classList.remove('cart-open');
+    }
+    return () => document.body.classList.remove('cart-open');
+  }, [isCartOpen]);
 
   const handleCloseCart = () => {
     setIsCartOpen(false);
