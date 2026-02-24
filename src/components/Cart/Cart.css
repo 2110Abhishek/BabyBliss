@@ -217,8 +217,7 @@
 
 .cart-footer {
   border-top: 1px solid var(--border-color);
-  padding: 1.5rem 1.5rem 6rem 1.5rem;
-  /* Extra padding at bottom so it doesn't overlap with chatbot */
+  padding: 1.5rem;
   background-color: var(--bg-color);
 }
 
