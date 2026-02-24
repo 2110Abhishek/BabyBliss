@@ -94,7 +94,7 @@ const Login = () => {
 
         if (!user.emailVerified) {
           await logout(); // Kick them out
-          alert("Email Not Verified. Please check your inbox and verify your email.");
+          alert("Email Not Verified. Please check your spam folder and verify your email.");
           return; // Do not navigate
         }
         // If verified, proceed
