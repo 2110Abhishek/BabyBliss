@@ -38,7 +38,7 @@ const Login = () => {
     }
     try {
       await resetPassword(email);
-      alert("Password reset email sent! Check your inbox.");
+      alert("Password reset email sent! Check your spam folder.");
     } catch (error) {
       console.error(error);
       alert("Error sending reset email: " + error.message);
