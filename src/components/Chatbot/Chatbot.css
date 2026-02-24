@@ -2,7 +2,7 @@
     position: fixed;
     bottom: 24px;
     right: 24px;
-    z-index: 999;
+    z-index: 9999;
 }
 
 .chatbot-toggle-btn {
@@ -282,8 +282,11 @@
         bottom: 0;
         right: 0;
         width: 100vw;
-        height: 100dvh;
-        border-radius: 0;
+        height: 100%;
+        max-height: calc(100% - 60px);
+        /* Leave room for mobile nav headers */
+        border-radius: 16px 16px 0 0;
+        z-index: 10000;
     }
 
     .chatbot-toggle-btn {
