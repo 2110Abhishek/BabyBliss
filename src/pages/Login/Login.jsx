@@ -86,7 +86,7 @@ const Login = () => {
         await signupWithEmail(email, password, name);
         // FORCE LOGOUT after signup so they can't access app without verification
         await logout();
-        alert("Signup Success! verification email sent. Please Verify your email then login.");
+        alert("Signup Success! Verification email sent. Please verify your email in your SPAM FOLDER, then login.");
         setIsSignup(false); // Switch back to login mode
       } else {
         const userCredential = await loginWithEmail(email, password);
