@@ -78,7 +78,7 @@
     word-break: break-word;
     overflow-wrap: break-word;
     box-sizing: border-box;
-    max-width: 100%;
+    max-width: 80%;
 }
 
 .address-card p {
@@ -94,8 +94,8 @@
 
 .default-badge {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 0px;
+    right: 5px;
     background: #10b981;
     color: white;
     padding: 2px 8px;
