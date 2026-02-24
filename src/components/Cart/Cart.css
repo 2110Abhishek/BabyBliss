@@ -219,6 +219,7 @@
   border-top: 1px solid var(--border-color);
   padding: 1.5rem;
   background-color: var(--bg-color);
+  margin-top: auto;
 }
 
 .cart-totals {
