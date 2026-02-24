@@ -1,0 +1,113 @@
+/* src/components/Loader/FullScreenLoader.css */
+.fullscreen-loader-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    width: 100%;
+}
+
+.premium-loader {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.loader-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid transparent;
+}
+
+.loader-ring:nth-child(1) {
+    border-top-color: #3b82f6;
+    /* Primary blue */
+    border-left-color: #3b82f6;
+    animation: spin-forward 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.loader-ring:nth-child(2) {
+    width: 70%;
+    height: 70%;
+    border-bottom-color: #f472b6;
+    /* Pink accent */
+    border-right-color: #f472b6;
+    animation: spin-backward 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite alternate;
+}
+
+.loader-core {
+    width: 40%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-heart 1.5s ease-in-out infinite;
+}
+
+.loader-core svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 6px rgba(244, 114, 182, 0.4));
+}
+
+.loader-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    animation: text-glow 2s ease-in-out infinite alternate;
+    background: linear-gradient(135deg, #f472b6, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+@keyframes spin-forward {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin-backward {
+    0% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes pulse-heart {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes text-glow {
+    0% {
+        opacity: 0.7;
+        filter: blur(0px);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+}

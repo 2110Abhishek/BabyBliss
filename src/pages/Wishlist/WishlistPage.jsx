@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/cartSlice';
 import { Link } from 'react-router-dom';
 import { FiTrash2, FiShoppingCart, FiHeart } from 'react-icons/fi';
+import FullScreenLoader from '../../components/Loader/FullScreenLoader';
 import './WishlistPage.css';
 
 const WishlistPage = () => {
@@ -16,12 +17,7 @@ const WishlistPage = () => {
     };
 
     if (loading) {
-        return (
-            <div className="loading-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-                <div className="loading-spinner" style={{ width: '50px', height: '50px', border: '3px solid #f3f3f3', borderTop: '3px solid #3498db', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '20px' }}></div>
-                <p>Loading Wishlist...</p>
-            </div>
-        );
+        return <FullScreenLoader text="Loading Wishlist..." />;
     }
 
     return (

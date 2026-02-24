@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/Authcontext';
+import FullScreenLoader from './Loader/FullScreenLoader';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -14,12 +15,7 @@ const ProtectedRoute = ({ children }) => {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <FullScreenLoader text="Loading..." />;
   }
 
   if (!user) {
