@@ -14,7 +14,12 @@ const ProtectedRoute = ({ children }) => {
   }, [user, loading, navigate]);
 
   if (loading) {
-    return <div className="loading-spinner">Loading...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   if (!user) {

@@ -15,7 +15,14 @@ const WishlistPage = () => {
         toggleWishlist(product); // Remove from wishlist
     };
 
-    if (loading) return <div className="loading">Loading...</div>;
+    if (loading) {
+        return (
+            <div className="loading-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+                <div className="loading-spinner" style={{ width: '50px', height: '50px', border: '3px solid #f3f3f3', borderTop: '3px solid #3498db', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '20px' }}></div>
+                <p>Loading Wishlist...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="wishlist-page">
