@@ -38,9 +38,8 @@ const Login = () => {
     }
     try {
       await resetPassword(email);
-      alert("Password reset email sent! Check your SPAM FOLDER.");
+      alert("Password reset email sent! Check your 👉 SPAM FOLDER 👈.");
     } catch (error) {
-      console.error(error);
       alert("Error sending reset email: " + error.message);
     }
   };
@@ -86,7 +85,7 @@ const Login = () => {
         await signupWithEmail(email, password, name);
         // FORCE LOGOUT after signup so they can't access app without verification
         await logout();
-        alert("Signup Success! Verification email sent. Please verify your email in your SPAM FOLDER, then login.");
+        alert("Signup Success! Verification email sent. Please verify your email in your 👉 SPAM FOLDER 👈, then login.");
         setIsSignup(false); // Switch back to login mode
       } else {
         const userCredential = await loginWithEmail(email, password);
