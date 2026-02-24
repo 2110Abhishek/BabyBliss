@@ -34,6 +34,18 @@ const Chatbot = () => {
         scrollToBottom();
     }, [messages, isTyping]);
 
+    // Prevent background scrolling when chatbot is open on mobile
+    useEffect(() => {
+        if (isOpen) {
+            document.body.classList.add('chatbot-open-mobile');
+        } else {
+            document.body.classList.remove('chatbot-open-mobile');
+        }
+        return () => {
+            document.body.classList.remove('chatbot-open-mobile');
+        };
+    }, [isOpen]);
+
     const handleSend = async (e) => {
         e?.preventDefault();
 
