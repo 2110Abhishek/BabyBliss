@@ -77,6 +77,14 @@
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: break-word;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.address-card p {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-bottom: 5px;
 }
 
 .address-card.default {
