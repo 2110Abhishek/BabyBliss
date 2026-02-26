@@ -26,7 +26,6 @@
 
 .hero-content {
   display: flex;
-  flex-direction: row-reverse;
   align-items: center;
   height: 100%;
   padding: 2rem 0;
