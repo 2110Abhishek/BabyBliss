@@ -829,7 +829,7 @@
   .hero-slide.hero-image-offset .hero-image {
     margin-bottom: 0.2rem;
     /* Add buffer so button doesn't follow */
-    margin-top: -3.9rem;
+    margin-top: -4.1rem;
     /* Move image up */
   }
 
