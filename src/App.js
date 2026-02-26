@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Provider } from 'react-redux';
@@ -14,31 +14,32 @@ import Footer from './components/Footer/Footer';
 import NotificationPopup from './components/Notification/NotificationPopup';
 import ScrollToTop from './components/ScrollToTop';
 import Chatbot from './components/Chatbot/Chatbot';
+import FullScreenLoader from './components/Loader/FullScreenLoader';
 
 // Pages
-import Home from './pages/Home/Home';
-import Products from './pages/Products/Products';
-import ProductDetail from './pages/ProductDetail/ProductDetail';
-import CartPage from './pages/CartPage/CartPage';
-import Checkout from './pages/Checkout/Checkout';
-import Payment from './pages/Payment/Payment';
-import OrderSuccess from './pages/OrderSuccess/OrderSuccess';
+const Home = lazy(() => import('./pages/Home/Home'));
+const Products = lazy(() => import('./pages/Products/Products'));
+const ProductDetail = lazy(() => import('./pages/ProductDetail/ProductDetail'));
+const CartPage = lazy(() => import('./pages/CartPage/CartPage'));
+const Checkout = lazy(() => import('./pages/Checkout/Checkout'));
+const Payment = lazy(() => import('./pages/Payment/Payment'));
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess/OrderSuccess'));
 
-import OrderHistory from './pages/Orders/OrderHistory';
-import OrderTracking from './pages/Orders/OrderTracking'; // New Import
-import Login from './pages/Login/Login';
-import SellerPage from './pages/Seller/SellerPage'; // New Import
-import SellerRegistration from './pages/Seller/SellerRegistration'; // New Import
-import BlockedPage from './pages/Blocked/BlockedPage';
-import AdminDashboard from './pages/Admin/AdminDashboard';
-import WishlistPage from './pages/Wishlist/WishlistPage';
-import Profile from './pages/Profile/Profile'; // New Import
+const OrderHistory = lazy(() => import('./pages/Orders/OrderHistory'));
+const OrderTracking = lazy(() => import('./pages/Orders/OrderTracking'));
+const Login = lazy(() => import('./pages/Login/Login'));
+const SellerPage = lazy(() => import('./pages/Seller/SellerPage'));
+const SellerRegistration = lazy(() => import('./pages/Seller/SellerRegistration'));
+const BlockedPage = lazy(() => import('./pages/Blocked/BlockedPage'));
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'));
+const WishlistPage = lazy(() => import('./pages/Wishlist/WishlistPage'));
+const Profile = lazy(() => import('./pages/Profile/Profile'));
 
 // Legal Pages
-import PrivacyPolicy from './pages/Legal/PrivacyPolicy';
-import TermsOfService from './pages/Legal/TermsOfService';
-import ShippingPolicy from './pages/Legal/ShippingPolicy';
-import ReturnsPolicy from './pages/Legal/ReturnsPolicy';
+const PrivacyPolicy = lazy(() => import('./pages/Legal/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/Legal/TermsOfService'));
+const ShippingPolicy = lazy(() => import('./pages/Legal/ShippingPolicy'));
+const ReturnsPolicy = lazy(() => import('./pages/Legal/ReturnsPolicy'));
 
 
 // Styles
@@ -94,140 +95,142 @@ const AppContent = () => {
       {!isLoginPage && <Header />}
 
       <main className={`main-content ${isLoginPage ? 'login-layout' : ''}`} style={{ minHeight: '60vh' }}>
-        <Routes>
-          {/* PUBLIC */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/blocked" element={<BlockedPage />} />
+        <Suspense fallback={<FullScreenLoader />}>
+          <Routes>
+            {/* PUBLIC */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/blocked" element={<BlockedPage />} />
 
-          {/* PROTECTED */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
+            {/* PROTECTED */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/products"
-            element={
-              <ProtectedRoute>
-                <ProductsWithKey />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoute>
+                  <ProductsWithKey />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/product/:id"
-            element={
-              <ProtectedRoute>
-                <ProductDetail />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/product/:id"
+              element={
+                <ProtectedRoute>
+                  <ProductDetail />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/cart"
-            element={
-              <ProtectedRoute>
-                <CartPage />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <CartPage />
+                </ProtectedRoute>
+              }
+            />
 
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedRoute>
-                <Checkout />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/payment"
-            element={
-              <ProtectedRoute>
-                <Payment />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/order-success"
-            element={
-              <ProtectedRoute>
-                <OrderSuccess />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <OrderHistory />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/orders/:id/track"
-            element={
-              <ProtectedRoute>
-                <OrderTracking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wishlist"
-            element={
-              <ProtectedRoute>
-                <WishlistPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/sell"
-            element={<SellerPage />}
-          />
-          <Route
-            path="/sell/register"
-            element={
-              <ProtectedRoute>
-                <SellerRegistration />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/register-seller"
-            element={
-              <ProtectedRoute>
-                <SellerRegistration />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <Payment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order-success"
+              element={
+                <ProtectedRoute>
+                  <OrderSuccess />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <OrderHistory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/:id/track"
+              element={
+                <ProtectedRoute>
+                  <OrderTracking />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wishlist"
+              element={
+                <ProtectedRoute>
+                  <WishlistPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sell"
+              element={<SellerPage />}
+            />
+            <Route
+              path="/sell/register"
+              element={
+                <ProtectedRoute>
+                  <SellerRegistration />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/register-seller"
+              element={
+                <ProtectedRoute>
+                  <SellerRegistration />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Legal Routes */}
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/shipping" element={<ShippingPolicy />} />
-          <Route path="/returns" element={<ReturnsPolicy />} />
+            {/* Legal Routes */}
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/shipping" element={<ShippingPolicy />} />
+            <Route path="/returns" element={<ReturnsPolicy />} />
 
-        </Routes>
+          </Routes>
+        </Suspense>
       </main>
 
       {!isLoginPage && <Footer />}
