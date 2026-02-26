@@ -469,9 +469,9 @@
 
   .hero-btn {
     padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
-    width: fit-content;
-    margin: 0 auto;
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 1rem;
   }
 }
 
@@ -821,15 +821,16 @@
     order: 5;
     /* Button at bottom */
     width: 100%;
-    text-align: center;
+    margin-top: 1rem;
+    padding: 0 1rem;
   }
 
   /* Specific tweaks for Summer/Tech slides to move image up */
   .hero-slide.hero-image-offset .hero-image {
     margin-bottom: 0.2rem;
     /* Add buffer so button doesn't follow */
-    margin-top: -4.9rem;
-    /* Move image up another 1rem (total -4.5rem) */
+    margin-top: -3.9rem;
+    /* Move image up */
   }
 
   /* Ensure button is visible for offset slides too */
