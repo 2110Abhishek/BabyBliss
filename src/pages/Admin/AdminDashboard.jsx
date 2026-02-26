@@ -196,7 +196,12 @@ const AdminDashboard = () => {
             alert("Seller Approved!");
             const statusParam = sellerFilter === 'all' ? '' : `?status=${sellerFilter}`;
             const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/sellers${statusParam}`, { headers: { Authorization: `Bearer ${token}` } });
-            setSellers(res.data);
+            if (res.data.sellers) {
+                setSellers(res.data.sellers);
+                setSellersTotalPages(res.data.totalPages);
+            } else {
+                setSellers(res.data);
+            }
         } catch (e) { console.error(e); alert("Failed to approve seller."); }
     };
     const handleBlockSeller = async (sellerId) => {
@@ -207,7 +212,12 @@ const AdminDashboard = () => {
             alert("Seller Blocked!");
             const statusParam = sellerFilter === 'all' ? '' : `?status=${sellerFilter}`;
             const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/sellers${statusParam}`, { headers: { Authorization: `Bearer ${token}` } });
-            setSellers(res.data);
+            if (res.data.sellers) {
+                setSellers(res.data.sellers);
+                setSellersTotalPages(res.data.totalPages);
+            } else {
+                setSellers(res.data);
+            }
         } catch (e) { console.error(e); alert("Failed to block seller."); }
     };
     const handleDeleteSeller = async (sellerId) => {
@@ -218,7 +228,12 @@ const AdminDashboard = () => {
             alert("Seller Deleted!");
             const statusParam = sellerFilter === 'all' ? '' : `?status=${sellerFilter}`;
             const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/sellers${statusParam}`, { headers: { Authorization: `Bearer ${token}` } });
-            setSellers(res.data);
+            if (res.data.sellers) {
+                setSellers(res.data.sellers);
+                setSellersTotalPages(res.data.totalPages);
+            } else {
+                setSellers(res.data);
+            }
         } catch (e) { console.error(e); alert("Failed to delete seller."); }
     };
     const handleViewProducts = async (seller) => {
