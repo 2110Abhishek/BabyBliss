@@ -13,7 +13,7 @@ const SellerDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
 
     // Dashboard Data State
-    const [stats, setStats] = useState({ totalEarnings: 0, totalOrders: 0, totalProducts: 0, pendingOrders: 0 });
+    const [stats, setStats] = useState({ totalEarnings: 0, totalOrders: 0, totalProducts: 0, pendingOrders: 0, availableBalance: 0, withdrawnAmount: 0, bankAccount: null });
     const [recentOrders, setRecentOrders] = useState([]);
     const [analyticsData, setAnalyticsData] = useState([]);
     const [products, setProducts] = useState([]);
@@ -35,6 +35,10 @@ const SellerDashboard = () => {
     // Orders State
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
+
+    // Withdrawal State
+    const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [withdrawing, setWithdrawing] = useState(false);
 
     // Seller Verification State
     const [sellerStatus, setSellerStatus] = useState('loading'); // 'loading', 'approved', 'pending', 'blocked', 'none'
@@ -320,6 +324,22 @@ const SellerDashboard = () => {
         }
     };
 
+    const handleWithdraw = async (e) => {
+        e.preventDefault();
+        setWithdrawing(true);
+        try {
+            const res = await api.post('/seller/dashboard/withdraw', { uid: user.uid, amount: withdrawAmount });
+            alert(`Withdrawal of ₹${withdrawAmount} successful!`);
+            setWithdrawAmount('');
+            fetchStats();
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.error || "Withdrawal failed");
+        } finally {
+            setWithdrawing(false);
+        }
+    };
+
     // Calculate max sales for chart scaling
     const maxSales = analyticsData.length > 0 ? Math.max(...analyticsData.map(d => d.sales)) : 100;
 
@@ -369,6 +389,47 @@ const SellerDashboard = () => {
                         </div>
                     </div>
 
+                    <div className="withdrawal-section" style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', marginBottom: '30px' }}>
+                        <h3>Earnings & Payouts</h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', margin: '20px 0' }}>
+                            <div className="stat-card" style={{ background: '#ecfdf5', padding: '20px', borderRadius: '8px', border: '1px solid #a7f3d0', textAlign: 'center' }}>
+                                <div style={{ fontSize: '2rem', color: '#059669', fontWeight: 'bold' }}>₹{(stats.availableBalance || 0).toLocaleString()}</div>
+                                <div style={{ color: '#047857' }}>Available Balance</div>
+                            </div>
+                            <div className="stat-card" style={{ background: '#f3f4f6', padding: '20px', borderRadius: '8px', border: '1px solid #e5e7eb', textAlign: 'center' }}>
+                                <div style={{ fontSize: '2rem', color: '#4b5563', fontWeight: 'bold' }}>₹{(stats.withdrawnAmount || 0).toLocaleString()}</div>
+                                <div style={{ color: '#374151' }}>Withdrawn Amount</div>
+                            </div>
+                        </div>
+                        {stats.bankAccount && stats.bankAccount.bankName ? (
+                            <div style={{ background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px dashed #cbd5e1' }}>
+                                <h4 style={{ margin: '0 0 10px 0', fontSize: '1rem', color: '#334155' }}>Linked Bank Account</h4>
+                                <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 5px 0' }}>Bank: <strong>{stats.bankAccount.bankName}</strong></p>
+                                <p style={{ fontSize: '0.9rem', color: '#64748b', margin: '0 0 15px 0' }}>A/C: <strong>••••{String(stats.bankAccount.accountNumber).slice(-4)}</strong> (IFSC: {stats.bankAccount.ifscCode})</p>
+
+                                <form onSubmit={handleWithdraw} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        step="0.01"
+                                        max={stats.availableBalance || 0}
+                                        value={withdrawAmount}
+                                        onChange={(e) => setWithdrawAmount(e.target.value)}
+                                        placeholder="Amount to withdraw"
+                                        required
+                                        style={{ padding: '8px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', flex: '1', maxWidth: '200px' }}
+                                    />
+                                    <button type="submit" disabled={withdrawing || stats.availableBalance <= 0 || !withdrawAmount} style={{ padding: '8px 16px', background: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: withdrawing || stats.availableBalance <= 0 || !withdrawAmount ? 'not-allowed' : 'pointer', opacity: withdrawing || stats.availableBalance <= 0 || !withdrawAmount ? 0.7 : 1 }}>
+                                        {withdrawing ? 'Processing...' : 'Withdraw to Bank'}
+                                    </button>
+                                </form>
+                            </div>
+                        ) : (
+                            <div style={{ background: '#fef2f2', padding: '15px', borderRadius: '8px', color: '#b91c1c', border: '1px solid #fecaca' }}>
+                                You have not linked a valid bank account for payouts. Please update your profile.
+                            </div>
+                        )}
+                    </div>
 
                     <div className="recent-activity" style={{ background: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
                         <h3>Recent Orders</h3>
