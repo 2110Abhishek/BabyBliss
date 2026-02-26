@@ -101,8 +101,8 @@
 }
 
 .hero-image-offset img {
-  margin-top: 5rem;
-  /* Push down specifically for these slides */
+  margin-top: 3.9rem;
+  /* Push down specifically for these slides, adjusted up by 0.2rem */
 }
 
 .hero-dots {
