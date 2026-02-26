@@ -8,6 +8,11 @@ import { AuthProvider, useAuth } from './context/Authcontext';
 import { auth } from './firebase/firebase';
 import ProtectedRoute from './components/ProtectedRoute';
 
+// Styles
+import './styles/globals.css';
+import './styles/animations.css';
+import './App.css';
+
 // Components
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -40,12 +45,6 @@ const PrivacyPolicy = lazy(() => import('./pages/Legal/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/Legal/TermsOfService'));
 const ShippingPolicy = lazy(() => import('./pages/Legal/ShippingPolicy'));
 const ReturnsPolicy = lazy(() => import('./pages/Legal/ReturnsPolicy'));
-
-
-// Styles
-import './styles/globals.css';
-import './styles/animations.css';
-import './App.css';
 
 const ProductsWithKey = () => {
   const location = useLocation();
