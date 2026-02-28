@@ -7,10 +7,6 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import { allProducts, categories as allCategories } from '../../data/allProducts';
 import { convertAdjustAndFormat } from '../../utils/currency';
 
-// Image imports — make sure these files exist in src/assets/
-import WelcomeBliss from '../../assets/Welcome-Bliss.png';
-import SummerBaby from '../../assets/summer-baby.png';
-import NewTech from '../../assets/New-Tech.png';
 import api from '../../api/api';
 import toast from 'react-hot-toast';
 
@@ -85,16 +81,17 @@ const Home = () => {
       title: 'Welcome to Bliss Bloomly',
       subtitle: 'Premium Products for Your Little One',
       description: 'Discover the best selection of baby essentials with free shipping on orders over ₹500',
-      image: WelcomeBliss, // imported asset
+      image: '/assets/images/Welcome-Bliss.png', // Using public asset for preloading
       buttonText: 'Shop Now',
       color: 'linear-gradient(135deg, #0ea5e9, #3b82f6)',
-      link: '/products'
+      link: '/products',
+      priority: true // Mark for LCP optimization
     },
     {
       title: 'Summer Collection',
-      subtitle: 'Up to 50% Off',
+      subtitle: 'Up to 20% Off',
       description: 'Lightweight clothing and accessories for sunny days',
-      image: SummerBaby,      // imported asset
+      image: '/assets/images/summer-baby.png',      // Using public asset
       buttonText: 'View Deals',
       color: 'linear-gradient(135deg, #f472b6, #f59e0b)',
       extraClass: 'hero-image-offset',
@@ -104,7 +101,7 @@ const Home = () => {
       title: 'New Tech for Parents',
       subtitle: 'Smart Baby Gear',
       description: 'Innovative gadgets to make parenting easier and safer',
-      image: NewTech, // imported asset
+      image: '/assets/images/New-Tech.png', // Using public asset
       buttonText: 'Explore Tech',
       color: 'linear-gradient(135deg, #10b981, #059669)',
       extraClass: 'hero-image-offset',
@@ -225,7 +222,8 @@ const Home = () => {
                     transition={{ duration: 0.6 }}
                     src={slide.image}
                     alt={slide.title}
-                    loading="lazy"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    {...(index === 0 ? { fetchPriority: "high" } : {})}
                     draggable={false}
                   />
                 </div>
