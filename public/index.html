@@ -22,13 +22,164 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+  <style>
+    /* Instant-Load Splash Screen Styles */
+    #root-splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      z-index: 9999;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .splash-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .splash-logo-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 24px;
+    }
+
+    .splash-ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 5px solid transparent;
+      border-top-color: #3b82f6;
+      border-left-color: #3b82f6;
+      animation: splash-spin 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    .splash-ring-inner {
+      position: absolute;
+      top: 15%;
+      left: 15%;
+      width: 70%;
+      height: 70%;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      border-bottom-color: #f472b6;
+      border-right-color: #f472b6;
+      animation: splash-spin-reverse 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    .splash-heart {
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      width: 40%;
+      height: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: splash-pulse 1.5s ease-in-out infinite;
+    }
+
+    .splash-heart-svg {
+      width: 100%;
+      height: 100%;
+      fill: #f472b6;
+      filter: drop-shadow(0 4px 6px rgba(244, 114, 182, 0.3));
+    }
+
+    .splash-text {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #3b82f6;
+      text-transform: uppercase;
+      margin-top: 12px;
+      background: linear-gradient(135deg, #f472b6, #3b82f6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: splash-glow 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes splash-spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes splash-spin-reverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes splash-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    @keyframes splash-glow {
+      from {
+        opacity: 0.8;
+        filter: blur(0px);
+      }
+
+      to {
+        opacity: 1;
+        filter: blur(0.5px);
+      }
+    }
+  </style>
   <title>Bliss Bloomly</title>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Zero-Latency Splash Screen -->
+    <div id="root-splash">
+      <div class="splash-container">
+        <div class="splash-logo-container">
+          <div class="splash-ring"></div>
+          <div class="splash-ring-inner"></div>
+          <div class="splash-heart">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+          </div>
+        </div>
+        <div class="splash-text">Bliss Bloomly</div>
+      </div>
+    </div>
+  </div>
   <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
