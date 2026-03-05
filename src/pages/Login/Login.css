@@ -18,7 +18,7 @@
   position: absolute;
   width: 120%;
   height: 120%;
-  background: radial-gradient(circle at 50% 50%, rgba(255, 107, 107, 0.08), transparent 60%);
+  background: radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.08), transparent 60%);
   animation: pulseBg 10s ease-in-out infinite alternate;
   z-index: 0;
 }
@@ -103,9 +103,9 @@
 
 .login-input:focus {
   outline: none;
-  border-color: #ff6b6b;
+  border-color: var(--primary-color);
   background: #fff;
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.1);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.1);
 }
 
 .login-input::placeholder {
@@ -148,12 +148,12 @@
 }
 
 .forgot-password-link:hover {
-  color: #ff6b6b;
+  color: var(--primary-color);
   text-decoration: none;
 }
 
 .login-btn {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
   padding: 16px;
@@ -163,12 +163,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 0.5rem;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
 }
 
 .login-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
 }
 
 .login-btn:active {
@@ -233,7 +233,7 @@
 }
 
 .toggle-auth span {
-  color: #ff6b6b;
+  color: var(--primary-color);
   cursor: pointer;
   font-weight: 600;
   margin-left: 6px;
@@ -241,7 +241,7 @@
 }
 
 .toggle-auth span:hover {
-  color: #fa5252;
+  color: var(--primary-dark);
   text-decoration: underline;
 }
 
@@ -357,7 +357,7 @@
 }
 
 .contact-admin-section textarea:focus {
-  border-color: #ff6b6b;
+  border-color: var(--primary-color);
   outline: none;
 }
 
