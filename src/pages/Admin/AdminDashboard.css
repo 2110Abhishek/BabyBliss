@@ -393,30 +393,38 @@
 }
 
 .notifications-card .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
 }
 
 .notifications-card .form-group label {
-    display: block;
-    font-size: 0.75rem;
+    display: block !important;
+    font-size: 0.75rem !important;
     letter-spacing: 0.05em;
-    color: #94a3b8;
-    font-weight: 700;
+    color: #94a3b8 !important;
+    font-weight: 700 !important;
     text-transform: uppercase;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.8rem !important;
+    text-align: left;
+    width: 100%;
 }
 
 .notifications-card .form-control {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border: 1.5px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 0.95rem;
-    color: #334155;
-    background-color: #f8fafc;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-    font-family: inherit;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.85rem 1rem !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    font-size: 0.95rem !important;
+    color: #334155 !important;
+    background-color: #f8fafc !important;
+    box-sizing: border-box !important;
+    transition: all 0.3s ease !important;
+    font-family: inherit !important;
+    display: block !important;
 }
 
 .notifications-card .form-control:focus {
