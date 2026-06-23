@@ -16,6 +16,7 @@ const Profile = () => {
                         src={user.photoURL || 'https://ui-avatars.com/api/?name=' + user.displayName + '&background=random'}
                         alt="Profile"
                         className="profile-pic"
+                        loading="lazy"
                         onError={(e) => { e.target.onerror = null; e.target.src = 'https://ui-avatars.com/api/?name=' + user.displayName + '&background=random'; }}
                     />
                     <div className="profile-info">

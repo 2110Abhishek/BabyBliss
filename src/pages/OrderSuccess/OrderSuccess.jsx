@@ -109,7 +109,7 @@ const OrderSuccess = () => {
                     <div style={{ marginBottom: '2rem' }}>
                         {order.items.map((item, idx) => (
                             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem 0', borderBottom: '1px solid #f1f1f1' }}>
-                                <img src={item.image} alt={item.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #eee' }} />
+                                <img src={item.image} alt={item.name} loading="lazy" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #eee' }} />
                                 <div style={{ flex: 1 }}>
                                     <div style={{ fontWeight: '600', color: '#333' }}>{item.name}</div>
                                     <div style={{ fontSize: '0.9rem', color: '#888' }}>Qty: {item.quantity}</div>

@@ -39,10 +39,7 @@ const AdminDashboard = () => {
     const [creatingCoupon, setCreatingCoupon] = useState(false);
     const [editingCoupon, setEditingCoupon] = useState(null);
     const [couponForm, setCouponForm] = useState({ type: 'PERCENT', value: '', code: '', expiryDate: '', minOrderValue: '', maxDiscount: '', description: '', applicableCategories: '' });
-    const [kpiDetail, setKpiDetail] = useState(null); // 'revenue' | 'products'
-    const [allProductsList, setAllProductsList] = useState([]);
-    const [productsLoading, setProductsLoading] = useState(false);
-    const [productsSearch, setProductsSearch] = useState('');
+
     const [viewingAllProducts, setViewingAllProducts] = useState(false);
 
     const handleCouponChange = (e) => setCouponForm({ ...couponForm, [e.target.name]: e.target.value });
@@ -148,7 +145,6 @@ const AdminDashboard = () => {
                     const res = await axios.get('https://blissbloomlybackend.onrender.com/api/admin/requests', config);
                     setRequests(res.data);
                 } else if (activeTab === 'sellers') {
-                    const statusParam = sellerFilter === 'all' ? '' : `&status=${sellerFilter}`;
                     // Note: backend expects ?status=...&page=...
                     // So we construct url carefully or use params object if axios supports key overlap
                     const res = await axios.get('https://blissbloomlybackend.onrender.com/api/sellers', { ...config, params: { status: sellerFilter === 'all' ? undefined : sellerFilter, page: sellersPage, limit: 10 } });
@@ -718,7 +714,7 @@ const AdminDashboard = () => {
                                 <tbody>
                                     {viewingProducts.products.map(p => (
                                         <tr key={p._id}>
-                                            <td><img src={p.image} alt="" style={{ width: '40px', height: '40px' }} /></td>
+                                            <td><img src={p.image} alt="" loading="lazy" style={{ width: '40px', height: '40px' }} /></td>
                                             <td>{p.name}</td>
                                             <td>₹{p.price}</td>
                                             <td>{p.stock}</td>

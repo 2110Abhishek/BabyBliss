@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { useAuth } from '../../context/Authcontext';
 import { FiCheckCircle } from 'react-icons/fi';
 import './SellerPage.css';
-import SellerDashboard from './SellerDashboard';
+
+const SellerDashboard = React.lazy(() => import('./SellerDashboard'));
 
 const SellerPage = () => {
     const { user } = useAuth();
@@ -131,7 +132,13 @@ const SellerPage = () => {
                     <h1>Seller Dashboard</h1>
                     <p>Welcome back, {sellerProfile?.businessName || 'Seller'}!</p>
                 </div>
-                <SellerDashboard />
+                <Suspense fallback={
+                    <div style={{ padding: '2rem', textAlign: 'center', background: 'white', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                        <p style={{ color: '#666' }}>Loading Seller Dashboard...</p>
+                    </div>
+                }>
+                    <SellerDashboard />
+                </Suspense>
             </div>
         </div>
     );

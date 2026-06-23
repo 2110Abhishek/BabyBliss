@@ -40,7 +40,7 @@ const WishlistPage = () => {
                         {wishlist.map(product => (
                             <div key={product._id} className="wishlist-card" style={{ border: '1px solid #eee', borderRadius: '10px', overflow: 'hidden', padding: '10px' }}>
                                 <Link to={`/product/${product._id}`}>
-                                    <img src={product.image} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
+                                    <img src={product.image} alt={product.name} loading="lazy" style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
                                 </Link>
                                 <div className="p-details" style={{ padding: '10px 0' }}>
                                     <h3 style={{ fontSize: '1rem', marginBottom: '5px' }}>{product.name}</h3>

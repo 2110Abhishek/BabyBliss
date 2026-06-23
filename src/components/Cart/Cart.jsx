@@ -2,14 +2,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { FiTrash2, FiPlus, FiMinus, FiShoppingBag } from 'react-icons/fi';
-import { clearCart, removeFromCart, updateQuantity } from '../../redux/cartSlice';
+import { FiPlus, FiMinus, FiShoppingBag } from 'react-icons/fi';
+import { clearCart, updateQuantity } from '../../redux/cartSlice';
 import './Cart.css';
 import { convertAdjustAndFormat } from '../../utils/currency';
 
 const Cart = ({ isCartOpen, setIsCartOpen }) => {
   const dispatch = useDispatch();
-  const { items, total, shipping } = useSelector(state => state.cart);
+  const { items, shipping } = useSelector(state => state.cart);
 
   useEffect(() => {
     if (isCartOpen) {
@@ -24,9 +24,6 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
     setIsCartOpen(false);
   };
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeFromCart(id));
-  };
 
   const handleUpdateQuantity = (id, quantity) => {
     dispatch(updateQuantity({ id, quantity }));
@@ -73,6 +70,7 @@ const Cart = ({ isCartOpen, setIsCartOpen }) => {
                     <img
                       src={item.image || 'https://via.placeholder.com/80x80/f0f9ff/0ea5e9?text=Baby'}
                       alt={item.name}
+                      loading="lazy"
                     />
                   </div>
                   <div className="cart-item-details">

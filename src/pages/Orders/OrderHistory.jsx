@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/Authcontext';
 import api from '../../api/api';
 import { Link } from 'react-router-dom';
-import { FiPackage, FiShoppingBag, FiChevronRight } from 'react-icons/fi';
-import { convertAdjustAndFormat } from '../../utils/currency';
+import { FiShoppingBag } from 'react-icons/fi';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
@@ -77,7 +76,7 @@ const OrderHistory = () => {
                             <div className="order-items-preview">
                                 {order.items.map((item, index) => (
                                     <div key={index} className="preview-item">
-                                        <img src={item.image} alt={item.name} />
+                                        <img src={item.image} alt={item.name} loading="lazy" />
                                         <span>x{item.quantity}</span>
                                         <div className="item-variants" style={{ fontSize: '0.75rem', color: '#666' }}>
                                             {item.selectedSize && <span>{item.selectedSize} </span>}

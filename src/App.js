@@ -16,9 +16,7 @@ import './App.css';
 // Components
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import NotificationPopup from './components/Notification/NotificationPopup';
 import ScrollToTop from './components/ScrollToTop';
-import Chatbot from './components/Chatbot/Chatbot';
 import FullScreenLoader from './components/Loader/FullScreenLoader';
 
 // Pages
@@ -39,6 +37,9 @@ const BlockedPage = lazy(() => import('./pages/Blocked/BlockedPage'));
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard'));
 const WishlistPage = lazy(() => import('./pages/Wishlist/WishlistPage'));
 const Profile = lazy(() => import('./pages/Profile/Profile'));
+
+const NotificationPopup = lazy(() => import('./components/Notification/NotificationPopup'));
+const Chatbot = lazy(() => import('./components/Chatbot/Chatbot'));
 
 // Legal Pages
 const PrivacyPolicy = lazy(() => import('./pages/Legal/PrivacyPolicy'));
@@ -69,7 +70,7 @@ const App = () => {
 const AppContent = () => {
   const location = useLocation();
   const isLoginPage = location.pathname.toLowerCase().replace(/\/$/, '') === '/login';
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   // Check if user is blocked on every route change
@@ -233,8 +234,12 @@ const AppContent = () => {
       </main>
 
       {!isLoginPage && <Footer />}
-      {!isLoginPage && <NotificationPopup />}
-      {!isLoginPage && <Chatbot />}
+      {!isLoginPage && (
+        <Suspense fallback={null}>
+          <NotificationPopup />
+          <Chatbot />
+        </Suspense>
+      )}
       <Toaster
         position="top-right"
         containerStyle={{

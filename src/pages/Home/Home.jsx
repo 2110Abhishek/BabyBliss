@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { FiChevronRight, FiTruck, FiShield, FiRefreshCw, FiGift } from 'react-icons/fi';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
-import { allProducts, categories as allCategories } from '../../data/allProducts';
-import { convertAdjustAndFormat } from '../../utils/currency';
+import { categories as allCategories } from '../../data/allProducts';
 
 import api from '../../api/api';
 import toast from 'react-hot-toast';
@@ -223,7 +222,7 @@ const Home = () => {
                     src={slide.image}
                     alt={slide.title}
                     loading={index === 0 ? "eager" : "lazy"}
-                    {...(index === 0 ? { fetchPriority: "high" } : {})}
+                    {...(index === 0 ? { fetchpriority: "high" } : {})}
                     draggable={false}
                   />
                 </div>
@@ -317,7 +316,7 @@ const Home = () => {
               >
                 <div className="category-image-wrapper">
                   {category.image ? (
-                    <img src={category.image} alt={category.name} className="category-image" />
+                    <img src={category.image} alt={category.name} loading="lazy" className="category-image" />
                   ) : (
                     <div className="category-icon">{category.icon}</div>
                   )}

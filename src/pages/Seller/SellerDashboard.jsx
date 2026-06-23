@@ -1,10 +1,10 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/api';
 import { useAuth } from '../../context/Authcontext';
-import { FiUploadCloud, FiCheckCircle, FiPackage, FiShoppingBag, FiTruck, FiBarChart2, FiGrid, FiDollarSign, FiLoader, FiXCircle } from 'react-icons/fi';
+import { FiCheckCircle, FiPackage, FiShoppingBag, FiTruck, FiBarChart2, FiGrid, FiLoader, FiXCircle } from 'react-icons/fi';
 import './SellerPage.css';
 
 const SellerDashboard = () => {
@@ -43,13 +43,7 @@ const SellerDashboard = () => {
     // Seller Verification State
     const [sellerStatus, setSellerStatus] = useState('loading'); // 'loading', 'approved', 'pending', 'blocked', 'none'
 
-    useEffect(() => {
-        if (user) {
-            checkSellerStatus();
-        }
-    }, [user]);
-
-    const checkSellerStatus = async () => {
+    const checkSellerStatus = useCallback(async () => {
         try {
             const res = await api.get(`/sellers/me?uid=${user.uid}`);
             if (res.data) {
@@ -68,7 +62,13 @@ const SellerDashboard = () => {
                 setSellerStatus('error');
             }
         }
-    };
+    }, [user, navigate]);
+
+    useEffect(() => {
+        if (user) {
+            checkSellerStatus();
+        }
+    }, [user, checkSellerStatus]);
 
     useEffect(() => {
         if (!user || sellerStatus !== 'approved') return;
@@ -84,6 +84,7 @@ const SellerDashboard = () => {
         } else if (activeTab === 'analytics') { // New Tab
             fetchAnalytics();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeTab, user, sellerStatus]);
 
     if (sellerStatus === 'loading') return <div className="loading-screen"><FiLoader className="spin" /> Verifying Seller Account...</div>;
@@ -158,23 +159,6 @@ const SellerDashboard = () => {
         }
     };
 
-    const handleImageChange = (index, value) => {
-        const updatedImages = [...formData.images];
-        updatedImages[index] = value;
-        setFormData({ ...formData, images: updatedImages });
-    };
-
-    const handleAddImage = () => {
-        if (formData.images.length >= 5) return;
-        setFormData({ ...formData, images: [...formData.images, ''] });
-    };
-
-    const handleRemoveImage = (index) => {
-        if (formData.images.length <= 1) return;
-        const updatedImages = [...formData.images];
-        updatedImages.splice(index, 1);
-        setFormData({ ...formData, images: updatedImages });
-    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -328,7 +312,7 @@ const SellerDashboard = () => {
         e.preventDefault();
         setWithdrawing(true);
         try {
-            const res = await api.post('/seller/dashboard/withdraw', { uid: user.uid, amount: withdrawAmount });
+            await api.post('/seller/dashboard/withdraw', { uid: user.uid, amount: withdrawAmount });
             alert(`Withdrawal of ₹${withdrawAmount} successful!`);
             setWithdrawAmount('');
             fetchStats();
@@ -498,6 +482,7 @@ const SellerDashboard = () => {
                         <div className="add-product-section">
                             <h4 style={{ marginBottom: '15px' }}>{editingProduct ? 'Edit Product' : 'Add New Product'}</h4>
                             {success && <div className="success-banner" style={{ marginBottom: '15px', padding: '10px', background: '#d1fae5', color: '#065f46', borderRadius: '4px' }}>{editingProduct ? 'Product Updated!' : 'Product Listed!'}</div>}
+                            {error && <div className="error-banner" style={{ marginBottom: '15px', padding: '10px', background: '#fee2e2', color: '#b91c1c', borderRadius: '4px' }}>{error}</div>}
                             <form onSubmit={handleSubmit} className="seller-form compact-form">
                                 <div className="form-group"><label>Name</label><input type="text" name="name" value={formData.name} onChange={handleChange} required /></div>
                                 <div className="form-row">
@@ -633,7 +618,7 @@ const SellerDashboard = () => {
                                 <div className="seller-product-list">
                                     {products.map(p => (
                                         <div key={p._id} className="seller-product-item" style={{ display: 'flex', gap: '10px', padding: '10px', border: '1px solid #eee', borderRadius: '5px', marginBottom: '10px', background: '#fff' }}>
-                                            <img src={p.image} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
+                                            <img src={p.image} alt={p.name} loading="lazy" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px' }} />
                                             <div style={{ flex: 1 }}>
                                                 <div style={{ fontWeight: 'bold' }}>{p.name}</div>
                                                 <div style={{ fontSize: '0.9rem', color: '#666' }}>
@@ -683,7 +668,7 @@ const SellerDashboard = () => {
                                         {/* Filter to show only items belonging to this seller */}
                                         {order.items.filter(item => item.sellerId === user.uid).map((item, idx) => (
                                             <div key={idx} className="order-item-row" style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
-                                                <img src={item.image} alt={item.name} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
+                                                <img src={item.image} alt={item.name} loading="lazy" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }} />
                                                 <div>
                                                     <div style={{ fontWeight: 'bold' }}>{item.name}</div>
                                                     <div style={{ fontSize: '0.9em' }}>Qty: {item.quantity} | {item.priceFormatted || `₹${item.price}`}</div>

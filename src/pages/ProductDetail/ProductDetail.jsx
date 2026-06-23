@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { FiChevronLeft, FiHeart, FiShoppingCart, FiCornerUpLeft, FiChevronsLeft } from 'react-icons/fi';
+import { FiChevronLeft, FiHeart, FiCornerUpLeft } from 'react-icons/fi';
 import { addToCart } from '../../redux/cartSlice';
 import { useAuth } from '../../context/Authcontext';
 import api from '../../api/api'; // ✅ ADD THIS (API client)
@@ -86,6 +86,7 @@ const ProductDetail = () => {
       if (product.ageGroups?.length > 0 && !selectedAge) setSelectedAge(product.ageGroups[0]);
       if (product.packQuantities?.length > 0 && !selectedPack) setSelectedPack(product.packQuantities[0]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
   // Determine Current Variant & Stock
@@ -262,7 +263,7 @@ const ProductDetail = () => {
                       background: 'white'
                     }}
                   >
-                    <img src={img} alt={`View ${index + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                    <img src={img} alt={`View ${index + 1}`} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
                   </div>
                 ))}
               </div>
@@ -517,7 +518,7 @@ const ProductDetail = () => {
                   {review.images && review.images.length > 0 && (
                     <div style={{ marginTop: '10px', display: 'flex', gap: '10px' }}>
                       {review.images.map((img, idx) => (
-                        <img key={idx} src={img} alt="Review" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
+                        <img key={idx} src={img} alt="Review" loading="lazy" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
                       ))}
                     </div>
                   )}

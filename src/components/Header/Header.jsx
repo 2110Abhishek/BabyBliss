@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   FiShoppingCart,
   FiUser,
@@ -15,13 +14,14 @@ import {
   FiUploadCloud
 } from 'react-icons/fi';
 import { useSelector, useDispatch } from 'react-redux';
-import Cart from '../Cart/Cart';
 import { clearCart } from '../../redux/cartSlice';
 import './Header.css';
 import axios from 'axios';
 import { auth } from '../../firebase/firebase';
 import { useAuth } from '../../context/Authcontext';
-import NotificationDropdown from '../Notification/NotificationDropdown';
+
+const Cart = lazy(() => import('../Cart/Cart'));
+const NotificationDropdown = lazy(() => import('../Notification/NotificationDropdown'));
 
 
 
@@ -98,24 +98,7 @@ const Header = () => {
     }
   };
 
-  // Fetch notifications on mount and when user changes
-  useEffect(() => {
-    if (user) {
-      fetchNotifications();
-    } else {
-      setNotifications([]);
-      setUnreadCount(0);
-    }
-  }, [user]);
-
-  // Poll for new notifications every 60 seconds
-  useEffect(() => {
-    if (!user) return;
-    const interval = setInterval(fetchNotifications, 60000);
-    return () => clearInterval(interval);
-  }, [user]);
-
-  const fetchNotifications = async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
       if (!user && !auth.currentUser) return;
       // Use auth.currentUser logic similar to AdminDashboard if needed, or just uid if public/protected by middleware
@@ -128,7 +111,25 @@ const Header = () => {
     } catch (err) {
       console.error("Failed to fetch notifications", err);
     }
-  };
+  }, [user]);
+
+  // Fetch notifications on mount and when user changes
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    } else {
+      setNotifications([]);
+      setUnreadCount(0);
+    }
+  }, [user, fetchNotifications]);
+
+  // Poll for new notifications every 60 seconds
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user, fetchNotifications]);
+
 
   const markAsRead = async (id) => {
     try {
@@ -210,6 +211,7 @@ const Header = () => {
                 <div className="header__notification-container desktop-only-action" style={{ position: 'relative' }} onMouseLeave={() => setShowNotifications(false)}>
                   <button
                     className="header__action-btn"
+                    onMouseEnter={() => import('../Notification/NotificationDropdown')}
                     onClick={() => {
                       setShowNotifications(!showNotifications);
                       setIsSearchOpen(false);
@@ -222,12 +224,14 @@ const Header = () => {
                   </button>
 
                   {showNotifications && (
-                    <NotificationDropdown
-                      notifications={notifications}
-                      onMarkRead={handleNotificationClick}
-                      onClose={() => setShowNotifications(false)}
-                      onMarkAllRead={markAllAsRead}
-                    />
+                    <Suspense fallback={null}>
+                      <NotificationDropdown
+                        notifications={notifications}
+                        onMarkRead={handleNotificationClick}
+                        onClose={() => setShowNotifications(false)}
+                        onMarkAllRead={markAllAsRead}
+                      />
+                    </Suspense>
                   )}
                 </div>
               )}
@@ -253,6 +257,7 @@ const Header = () => {
 
               <button
                 className="header__action-btn header__cart-btn"
+                onMouseEnter={() => import('../Cart/Cart')}
                 onClick={() => {
                   setIsCartOpen(!isCartOpen);
                   setIsSearchOpen(false);
@@ -440,7 +445,7 @@ const Header = () => {
                     >
                       <div className="header__suggestion-image">
                         {/* Placeholder or actual image if available */}
-                        <img src={product.image || product.images?.[0] || 'https://via.placeholder.com/40'} alt={product.name} />
+                        <img src={product.image || product.images?.[0] || 'https://via.placeholder.com/40'} alt={product.name} loading="lazy" />
                       </div>
                       <div className="header__suggestion-info">
                         <span className="header__suggestion-name">{product.name}</span>
@@ -504,7 +509,9 @@ const Header = () => {
         </div>
       </header>
 
-      <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      <Suspense fallback={null}>
+        <Cart isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      </Suspense>
     </>
   );
 };
