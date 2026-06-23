@@ -1,19 +1,7 @@
 // src/utils/currency.js
 // Smart USD -> INR conversion + Indian-market price tuning
 
-// Base conversion rate (keeps the explicit USD->INR rate for transparency)
-// Base conversion rate (1:1 as per user request to match JSON exactly)
-const USD_TO_INR = 1;
 
-// Remove category factors - direct pass through
-const CATEGORY_FACTORS = {
-  default: 1.0
-};
-
-// Simple rounding or direct value
-function toRetailPriceINR(amount) {
-  return Math.round(amount);
-}
 
 export const convertUSDToINR = (usdAmount) => {
   return Number(usdAmount || 0);

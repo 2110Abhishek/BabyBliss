@@ -6,7 +6,6 @@ import {
   FiShoppingCart,
   FiHeart,
   FiStar,
-  FiEye,
   FiTruck,
   FiCheckCircle
 } from 'react-icons/fi';
@@ -67,7 +66,10 @@ const ProductCard = ({ product }) => {
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ y: -6 }}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        setIsHovered(true);
+        import('../../pages/ProductDetail/ProductDetail');
+      }}
       onMouseLeave={() => setIsHovered(false)}
     >
       <Link to={`/product/${product.id}`} className="product-card__link">

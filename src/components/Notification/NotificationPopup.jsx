@@ -12,25 +12,25 @@ const NotificationPopup = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const checkNewNotifications = async () => {
+            try {
+                // Fetch latest unread notification
+                const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/notifications/user/${user.uid}`);
+                const unread = res.data.filter(n => !n.isRead);
+
+                if (unread.length > 0) {
+                    // Show the most recent unread notification
+                    setPopupNotification(unread[0]);
+                }
+            } catch (error) {
+                console.error("Failed to check notifications", error);
+            }
+        };
+
         if (user) {
             checkNewNotifications();
         }
     }, [user]);
-
-    const checkNewNotifications = async () => {
-        try {
-            // Fetch latest unread notification
-            const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/notifications/user/${user.uid}`);
-            const unread = res.data.filter(n => !n.isRead);
-
-            if (unread.length > 0) {
-                // Show the most recent unread notification
-                setPopupNotification(unread[0]);
-            }
-        } catch (error) {
-            console.error("Failed to check notifications", error);
-        }
-    };
 
     const handleClose = async () => {
         if (popupNotification) {

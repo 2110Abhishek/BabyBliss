@@ -60,6 +60,21 @@ const Header = () => {
 
   const { user, logout, wishlist } = useAuth();
 
+  const preloadRoute = (path) => {
+    const cleanPath = path.split('?')[0].toLowerCase();
+    if (cleanPath === '/products') {
+      import('../../pages/Products/Products');
+    } else if (cleanPath === '/sell') {
+      import('../../pages/Seller/SellerPage');
+    } else if (cleanPath === '/profile') {
+      import('../../pages/Profile/Profile');
+    } else if (cleanPath === '/orders') {
+      import('../../pages/Orders/OrderHistory');
+    } else if (cleanPath === '/admin') {
+      import('../../pages/Admin/AdminDashboard');
+    }
+  };
+
   const menuItems = [
     { name: 'Home', path: '/', icon: <FiHome /> },
     { name: 'Shop All', path: '/products' },
@@ -189,6 +204,7 @@ const Header = () => {
                   key={item.name}
                   href={item.path}
                   className="header__nav-link"
+                  onMouseEnter={() => preloadRoute(item.path)}
                   onClick={(e) => handleNavigation(item.path, e)}
                 >
                   {item.icon && <span>{item.icon}</span>}
@@ -238,6 +254,7 @@ const Header = () => {
 
               <button
                 className="header__action-btn desktop-only-action"
+                onMouseEnter={() => import('../../pages/Wishlist/WishlistPage')}
                 onClick={() => {
                   navigate('/wishlist');
                   setIsSearchOpen(false);
@@ -306,6 +323,7 @@ const Header = () => {
                         </div>
                         {user.email === 'blissbloomly@gmail.com' && (
                           <button
+                            onMouseEnter={() => import('../../pages/Admin/AdminDashboard')}
                             onClick={() => { navigate('/admin'); setUserMenuOpen(false); }}
                             style={{
                               display: 'flex', alignItems: 'center', gap: '8px',
@@ -317,6 +335,7 @@ const Header = () => {
                           </button>
                         )}
                         <button
+                          onMouseEnter={() => import('../../pages/Profile/Profile')}
                           onClick={() => { navigate('/profile'); setUserMenuOpen(false); }}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
@@ -327,6 +346,7 @@ const Header = () => {
                           <FiUser /> My Profile
                         </button>
                         <button
+                          onMouseEnter={() => import('../../pages/Orders/OrderHistory')}
                           onClick={() => { navigate('/orders'); setUserMenuOpen(false); }}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
@@ -466,6 +486,7 @@ const Header = () => {
                   key={item.name}
                   href={item.path}
                   className="header__mobile-link"
+                  onMouseEnter={() => preloadRoute(item.path)}
                   onClick={(e) => handleNavigation(item.path, e)}
                 >
                   {item.icon && <span className="header__mobile-icon">{item.icon}</span>}
@@ -481,14 +502,14 @@ const Header = () => {
                     Signed in as <br /> <strong>{user.email}</strong>
                   </div>
                   {user.email === 'blissbloomly@gmail.com' && (
-                    <a href="/admin" className="header__mobile-link" onClick={(e) => handleNavigation('/admin', e)}>
+                    <a href="/admin" className="header__mobile-link" onMouseEnter={() => import('../../pages/Admin/AdminDashboard')} onClick={(e) => handleNavigation('/admin', e)}>
                       <span className="header__mobile-icon"><FiUser /></span> Admin Panel
                     </a>
                   )}
-                  <a href="/profile" className="header__mobile-link" onClick={(e) => handleNavigation('/profile', e)}>
+                  <a href="/profile" className="header__mobile-link" onMouseEnter={() => import('../../pages/Profile/Profile')} onClick={(e) => handleNavigation('/profile', e)}>
                     <span className="header__mobile-icon"><FiUser /></span> My Profile
                   </a>
-                  <a href="/orders" className="header__mobile-link" onClick={(e) => handleNavigation('/orders', e)}>
+                  <a href="/orders" className="header__mobile-link" onMouseEnter={() => import('../../pages/Orders/OrderHistory')} onClick={(e) => handleNavigation('/orders', e)}>
                     <span className="header__mobile-icon"><FiPackage /></span> My Orders
                   </a>
                   <button

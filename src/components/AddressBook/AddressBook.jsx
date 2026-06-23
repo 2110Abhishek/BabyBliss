@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/Authcontext';
-import { FiPlus, FiTrash2, FiCheck, FiMapPin } from 'react-icons/fi';
+import { FiPlus, FiTrash2 } from 'react-icons/fi';
 import './AddressBook.css';
 
 const AddressBook = ({ onSelectAddress, selectable = false }) => {
@@ -14,26 +14,26 @@ const AddressBook = ({ onSelectAddress, selectable = false }) => {
     });
 
     useEffect(() => {
+        const fetchAddresses = async () => {
+            try {
+                if (!user || !user.uid) {
+                    console.warn("fetchAddresses: No user or uid found", user);
+                    return;
+                }
+                console.log("Fetching addresses for", user.uid);
+                setLoading(true);
+                const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/users/address/${user.uid}`);
+                console.log("Address fetch response:", res.data);
+                setAddresses(res.data);
+            } catch (error) {
+                console.error("Error fetching addresses", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (user) fetchAddresses();
     }, [user]);
-
-    const fetchAddresses = async () => {
-        try {
-            if (!user || !user.uid) {
-                console.warn("fetchAddresses: No user or uid found", user);
-                return;
-            }
-            console.log("Fetching addresses for", user.uid);
-            setLoading(true);
-            const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/users/address/${user.uid}`);
-            console.log("Address fetch response:", res.data);
-            setAddresses(res.data);
-        } catch (error) {
-            console.error("Error fetching addresses", error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;

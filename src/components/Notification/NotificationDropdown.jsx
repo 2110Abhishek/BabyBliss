@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiCheck, FiMaximize2, FiFileText, FiMessageSquare, FiInfo, FiClock, FiX } from 'react-icons/fi';
+import { FiCheck, FiMaximize2, FiFileText, FiMessageSquare, FiInfo } from 'react-icons/fi';
 import './NotificationDropdown.css';
 
 const NotificationDropdown = ({ notifications, onMarkRead, onClose, onMarkAllRead }) => {
@@ -47,7 +47,6 @@ const NotificationDropdown = ({ notifications, onMarkRead, onClose, onMarkAllRea
     };
 
     const groupOrder = ['Today', 'Yesterday', 'Older'];
-    const allRead = notifications.length > 0 && notifications.every(n => n.isRead);
 
     return (
         <motion.div

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiStar, FiUpload } from 'react-icons/fi';
+import { FiStar } from 'react-icons/fi';
 import api from '../api/api';
 import toast from 'react-hot-toast';
 

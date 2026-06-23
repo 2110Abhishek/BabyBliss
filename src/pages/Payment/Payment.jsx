@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { clearCart } from '../../redux/cartSlice';
 import { convertAdjustAndFormat } from '../../utils/currency';
 import { FiCreditCard, FiPackage, FiLoader, FiShield } from 'react-icons/fi';
 import './Payment.css';
@@ -9,7 +8,6 @@ import { auth } from '../../firebase/firebase';
 import api from '../../api/api';
 
 const Payment = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { items, total, shipping, shippingAddress, coupon } = useSelector((state) => state.cart);

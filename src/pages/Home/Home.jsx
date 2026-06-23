@@ -206,7 +206,7 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
                   >
-                    <Link to={slide.link || '/products'} className="btn btn-primary btn-lg hero-btn">
+                    <Link to={slide.link || '/products'} onMouseEnter={() => import('../../pages/Products/Products')} className="btn btn-primary btn-lg hero-btn">
                       {slide.buttonText}
                       <FiChevronRight />
                     </Link>
@@ -309,6 +309,7 @@ const Home = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
+                onMouseEnter={() => import('../../pages/Products/Products')}
                 onClick={() => handleCategoryClick(category.id)}
                 role="button"
                 tabIndex={0}

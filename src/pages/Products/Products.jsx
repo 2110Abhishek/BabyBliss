@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiGrid, FiList, FiFilter, FiChevronDown, FiShoppingBag, FiStar } from 'react-icons/fi';
-import { FaTshirt, FaBaby, FaGamepad, FaUtensils, FaBath, FaBed, FaShieldAlt, FaCar, FaMobile } from 'react-icons/fa';
+import { FaTshirt, FaBaby, FaGamepad, FaUtensils, FaBath, FaBed, FaMobile } from 'react-icons/fa';
 import api from '../../api/api';
 import { convertAdjustAndFormat } from '../../utils/currency';
 import './Products.css';
@@ -278,6 +278,7 @@ const Products = () => {
                   <Link
                     key={product.id}
                     to={`/product/${product.id}`}
+                    onMouseEnter={() => import('../ProductDetail/ProductDetail')}
                     className="product-card"
                   >
                     <div className="product-image-wrapper">

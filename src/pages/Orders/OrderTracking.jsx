@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../api/api';
 import './OrderTracking.css';
-import { FiPackage, FiTruck, FiCheckCircle, FiMapPin, FiBox, FiXCircle, FiRefreshCcw, FiCalendar, FiDollarSign } from 'react-icons/fi';
+import { FiPackage, FiTruck, FiCheckCircle, FiBox, FiXCircle, FiRefreshCcw, FiCalendar, FiDollarSign } from 'react-icons/fi';
 
 const OrderTracking = () => {
     const { id } = useParams();
