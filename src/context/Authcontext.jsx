@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from "react";
-import axios from 'axios';
+import api from '../api/api';
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -65,14 +65,14 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const res = await axios.post('https://blissbloomlybackend.onrender.com/api/users/wishlist/toggle', {
+      const res = await api.post('/users/wishlist/toggle', {
         uid: user.uid,
         productId: product._id
       });
 
       if (res.data.success) {
         // Optimistic update or fetch again
-        const listRes = await axios.get(`https://blissbloomlybackend.onrender.com/api/users/wishlist/${user.uid}`);
+        const listRes = await api.get(`/users/wishlist/${user.uid}`);
         setWishlist(listRes.data);
         return res.data.action; // 'added' or 'removed'
       }
@@ -91,14 +91,14 @@ export const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           // Sync User to Mongo
-          await axios.post('https://blissbloomlybackend.onrender.com/api/users/sync', {
+          await api.post('/users/sync', {
             uid: currentUser.uid,
             email: currentUser.email,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL
           });
 
-          const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/users/wishlist/${currentUser.uid}`);
+          const res = await api.get(`/users/wishlist/${currentUser.uid}`);
           setWishlist(res.data || []);
         } catch (error) {
           console.error("Error syncing/fetching wishlist:", error);

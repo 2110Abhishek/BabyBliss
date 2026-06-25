@@ -1,17 +1,24 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAvI5-KnvSS7kEhNGrfiNsU8FBDPfCfBs8",
-  authDomain: "blissbloomly-de0a8.firebaseapp.com",
-  projectId: "blissbloomly-de0a8",
-  storageBucket: "blissbloomly-de0a8.firebasestorage.app",
-  messagingSenderId: "428326819987",
-  appId: "1:428326819987:web:9af3a52c4c9029223b5566",
-  measurementId: "G-D95GEV7ZHM"
+export let auth;
+export let googleProvider;
+
+export const initFirebase = async () => {
+  try {
+    let API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    API_URL = API_URL.trim();
+    if (API_URL.endsWith('/')) API_URL = API_URL.slice(0, -1);
+
+    console.log("Fetching config from:", `${API_URL}/config`);
+    const response = await fetch(`${API_URL}/config`);
+    if (!response.ok) throw new Error("Failed to fetch config");
+    const { firebase: firebaseConfig } = await response.json();
+    
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+  } catch (error) {
+    console.error("Failed to initialize Firebase", error);
+  }
 };
-
-const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();

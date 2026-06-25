@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiBell, FiX } from 'react-icons/fi';
-import axios from 'axios';
+import api from '../../api/api';
 import { useAuth } from '../../context/Authcontext';
 import { useNavigate } from 'react-router-dom';
 import './NotificationPopup.css';
@@ -15,7 +15,7 @@ const NotificationPopup = () => {
         const checkNewNotifications = async () => {
             try {
                 // Fetch latest unread notification
-                const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/notifications/user/${user.uid}`);
+                const res = await api.get(`/notifications/user/${user.uid}`);
                 const unread = res.data.filter(n => !n.isRead);
 
                 if (unread.length > 0) {
@@ -41,7 +41,7 @@ const NotificationPopup = () => {
 
     const markAsRead = async (id) => {
         try {
-            await axios.put(`https://blissbloomlybackend.onrender.com/api/notifications/${id}/read`, { uid: user.uid });
+            await api.put(`/notifications/${id}/read`);
         } catch (e) {
             console.error(e);
         }

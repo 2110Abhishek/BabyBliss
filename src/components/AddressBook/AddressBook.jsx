@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { useAuth } from '../../context/Authcontext';
 import { FiPlus, FiTrash2 } from 'react-icons/fi';
 import './AddressBook.css';
@@ -22,7 +22,7 @@ const AddressBook = ({ onSelectAddress, selectable = false }) => {
                 }
                 console.log("Fetching addresses for", user.uid);
                 setLoading(true);
-                const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/users/address/${user.uid}`);
+                const res = await api.get(`/users/address/${user.uid}`);
                 console.log("Address fetch response:", res.data);
                 setAddresses(res.data);
             } catch (error) {
@@ -44,8 +44,7 @@ const AddressBook = ({ onSelectAddress, selectable = false }) => {
         e.preventDefault();
         try {
             console.log("Adding address via AddressBook", newAddress);
-            const res = await axios.post('https://blissbloomlybackend.onrender.com/api/users/address/add', {
-                uid: user.uid,
+            const res = await api.post('/users/address/add', {
                 address: newAddress
             });
             setAddresses(res.data);
@@ -61,7 +60,7 @@ const AddressBook = ({ onSelectAddress, selectable = false }) => {
     const handleDelete = async (addressId) => {
         if (!window.confirm("Are you sure?")) return;
         try {
-            const res = await axios.delete(`https://blissbloomlybackend.onrender.com/api/users/address/delete/${user.uid}/${addressId}`);
+            const res = await api.delete(`/users/address/delete/${user.uid}/${addressId}`);
             setAddresses(res.data);
         } catch (error) {
             alert("Failed to delete address");
@@ -70,7 +69,7 @@ const AddressBook = ({ onSelectAddress, selectable = false }) => {
 
     const handleSetDefault = async (addressId) => {
         try {
-            const res = await axios.put(`https://blissbloomlybackend.onrender.com/api/users/address/default/${user.uid}/${addressId}`);
+            const res = await api.put(`/users/address/default/${user.uid}/${addressId}`);
             setAddresses(res.data);
         } catch (error) {
             alert("Failed to set default");

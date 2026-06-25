@@ -19,7 +19,6 @@ const ReviewForm = ({ productId, onReviewAdded, user }) => {
         try {
             await api.post('/reviews', {
                 productId,
-                firebaseUid: user.uid,
                 rating,
                 comment,
                 images: imageUrl ? [imageUrl] : []
