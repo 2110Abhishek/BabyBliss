@@ -1,5 +1,5 @@
 // src/pages/ProductDetail/ProductDetail.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { FiChevronLeft, FiHeart, FiCornerUpLeft } from 'react-icons/fi';
@@ -8,10 +8,12 @@ import { useAuth } from '../../context/Authcontext';
 import api from '../../api/api'; // ✅ ADD THIS (API client)
 import { convertAdjustAndFormat } from '../../utils/currency';
 import toast from 'react-hot-toast';
-import ReviewForm from '../../components/ReviewForm';
 import Pagination from '../../components/Pagination';
-import Recommendations from '../../components/Recommendations/Recommendations';
+import SectionLoader from '../../components/Loader/SectionLoader';
 import './ProductDetail.css';
+
+const ReviewForm = lazy(() => import('../../components/ReviewForm'));
+const Recommendations = lazy(() => import('../../components/Recommendations/Recommendations'));
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -532,12 +534,16 @@ const ProductDetail = () => {
             />
           </div>
 
-          <ReviewForm productId={product.id} user={user} onReviewAdded={() => setRefreshReviews(prev => !prev)} />
+          <Suspense fallback={<SectionLoader />}>
+            <ReviewForm productId={product.id} user={user} onReviewAdded={() => setRefreshReviews(prev => !prev)} />
+          </Suspense>
         </div>
       </div>
 
       {/* AI Recommendations */}
-      <Recommendations currentProductId={product._id || product.id} title="Similar Products" subtitle="Keep exploring products you might love" />
+      <Suspense fallback={<SectionLoader />}>
+        <Recommendations currentProductId={product._id || product.id} title="Similar Products" subtitle="Keep exploring products you might love" />
+      </Suspense>
     </div>
   );
 };
