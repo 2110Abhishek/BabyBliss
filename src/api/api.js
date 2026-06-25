@@ -16,7 +16,11 @@ api.interceptors.request.use(async (config) => {
     const authInstance = getAuth();
     if (authInstance && authInstance.currentUser) {
       const token = await authInstance.currentUser.getIdToken(false);
-      config.headers.Authorization = `Bearer ${token}`;
+      if (config.headers && typeof config.headers.set === 'function') {
+        config.headers.set('Authorization', `Bearer ${token}`);
+      } else {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
   } catch (error) {
     console.error("Error getting Firebase token", error);
@@ -28,7 +32,11 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   response => response,
   error => {
-    console.error('[API ERROR]', error.response?.data || error.message);
+    console.error('[API ERROR]', {
+      url: error.config?.url,
+      message: error.message,
+      backendData: error.response?.data
+    });
     return Promise.reject(error);
   }
 );
