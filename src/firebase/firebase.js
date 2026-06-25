@@ -6,7 +6,7 @@ export let googleProvider;
 
 export const initFirebase = async () => {
   try {
-    let API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    let API_URL = process.env.REACT_APP_API_URL || 'https://blissbloomlybackend.onrender.com/api';
     API_URL = API_URL.trim();
     if (API_URL.endsWith('/')) API_URL = API_URL.slice(0, -1);
 

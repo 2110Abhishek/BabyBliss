@@ -15,7 +15,7 @@ const startApp = async () => {
     document.getElementById('root').innerHTML = `
       <div style="padding: 20px; color: red; font-family: sans-serif; text-align: center; margin-top: 50px;">
         <h2>Failed to connect to backend configuration</h2>
-        <p>Could not load public keys from the server. Please ensure the backend is running at http://localhost:5000</p>
+        <p>Could not load public keys from the server. Please ensure the backend is running and accessible.</p>
         <pre style="color: #666;">${error.message}</pre>
       </div>
     `;
