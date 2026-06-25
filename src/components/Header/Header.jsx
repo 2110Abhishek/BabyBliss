@@ -16,7 +16,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '../../redux/cartSlice';
 import './Header.css';
-import axios from 'axios';
+import api from '../../api/api';
 import { auth } from '../../firebase/firebase';
 import { useAuth } from '../../context/Authcontext';
 
@@ -119,7 +119,7 @@ const Header = () => {
       // Use auth.currentUser logic similar to AdminDashboard if needed, or just uid if public/protected by middleware
       // For now assuming public GET with uid param for simplicity, ideally secured with token
       const uid = user.uid;
-      const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/notifications/user/${uid}`);
+      const res = await api.get(`/notifications/user/${uid}`);
       setNotifications(res.data);
       const unread = res.data.filter(n => !n.isRead).length;
       setUnreadCount(unread);
@@ -148,7 +148,7 @@ const Header = () => {
 
   const markAsRead = async (id) => {
     try {
-      await axios.put(`https://blissbloomlybackend.onrender.com/api/notifications/${id}/read`, { uid: user.uid });
+      await api.put(`/notifications/${id}/read`, { uid: user.uid });
       // Update local state
       setNotifications(prev => prev.map(n =>
         n._id === id ? { ...n, isRead: true } : n
@@ -407,7 +407,7 @@ const Header = () => {
                     setQuery(val);
                     if (val.trim().length > 1) {
                       try {
-                        const res = await axios.get(`https://blissbloomlybackend.onrender.com/api/products?q=${encodeURIComponent(val)}`);
+                        const res = await api.get(`/products?q=${encodeURIComponent(val)}`);
                         // Ensure we extract the array properly based on the newer backend JSON structure
                         const items = res.data.products || res.data || [];
                         setSuggestions(items.slice(0, 5)); // Limit to 5 suggestions

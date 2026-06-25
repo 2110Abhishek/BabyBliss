@@ -76,7 +76,7 @@ const AppContent = () => {
   // Check if user is blocked on every route change
   React.useEffect(() => {
     const checkUserStatus = async () => {
-      if (auth.currentUser) {
+      if (auth && auth.currentUser) {
         try {
           await auth.currentUser.reload();
         } catch (error) {
