@@ -5,7 +5,7 @@ import { FiLogIn, FiEye, FiEyeOff } from 'react-icons/fi';
 import './Login.css';
 
 const Login = () => {
-  const { loginWithGoogle, loginWithEmail, signupWithEmail, resetPassword, logout } = useAuth();
+  const { user, loginWithGoogle, loginWithEmail, signupWithEmail, resetPassword, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -21,10 +21,16 @@ const Login = () => {
   const [blockedReason, setBlockedReason] = React.useState('');
   const [requestSent, setRequestSent] = React.useState(false);
 
+  React.useEffect(() => {
+    if (user && !isSignup) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from, isSignup]);
+
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
-      navigate(from, { replace: true });
+      // With signInWithRedirect, the page will navigate away.
     } catch (err) {
       console.error(err);
       alert('Google Login failed');

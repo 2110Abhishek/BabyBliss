@@ -2,7 +2,7 @@ import React, { useContext, createContext, useEffect, useState } from "react";
 import api from '../api/api';
 import {
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    return signInWithRedirect(auth, provider);
   };
 
   const loginWithEmail = (email, password) => {
