@@ -7,7 +7,7 @@ const API_BASE_URL =
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000
+  timeout: 60000 // Increased to 60s for Render free-tier cold starts
 });
 
 // Add Firebase token to every request automatically
