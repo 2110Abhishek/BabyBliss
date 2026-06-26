@@ -116,15 +116,27 @@ const Header = () => {
   const fetchNotifications = useCallback(async () => {
     try {
       if (!user && !auth.currentUser) return;
-      // Use auth.currentUser logic similar to AdminDashboard if needed, or just uid if public/protected by middleware
-      // For now assuming public GET with uid param for simplicity, ideally secured with token
       const uid = user.uid;
-      const res = await api.get(`/notifications/user/${uid}`);
+      
+      let token = '';
+      try {
+        if (auth.currentUser) {
+          token = await auth.currentUser.getIdToken(false);
+        }
+      } catch (e) {
+        console.error("Header: Failed to get token", e);
+      }
+
+      console.log("Header: Sending notifications request with token:", token ? "YES" : "NO");
+
+      const res = await api.get(`/notifications/user/${uid}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      });
       setNotifications(res.data);
       const unread = res.data.filter(n => !n.isRead).length;
       setUnreadCount(unread);
     } catch (err) {
-      console.error("Failed to fetch notifications", err);
+      console.error("Failed to fetch notifications", err.response?.data || err.message);
     }
   }, [user]);
 
