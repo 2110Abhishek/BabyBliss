@@ -16,11 +16,11 @@ api.interceptors.request.use(async (config) => {
     const authInstance = getAuth();
     if (authInstance && authInstance.currentUser) {
       const token = await authInstance.currentUser.getIdToken(false);
-      if (config.headers && typeof config.headers.set === 'function') {
-        config.headers.set('Authorization', `Bearer ${token}`);
-      } else {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+      // Bulletproof header assignment for all Axios versions
+      config.headers = {
+        ...(config.headers || {}),
+        Authorization: `Bearer ${token}`
+      };
     }
   } catch (error) {
     console.error("Error getting Firebase token", error);
