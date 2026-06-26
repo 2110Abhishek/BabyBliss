@@ -117,21 +117,7 @@ const Header = () => {
     try {
       if (!user && !auth.currentUser) return;
       const uid = user.uid;
-      
-      let token = '';
-      try {
-        if (auth.currentUser) {
-          token = await auth.currentUser.getIdToken(false);
-        }
-      } catch (e) {
-        console.error("Header: Failed to get token", e);
-      }
-
-      console.log("Header: Sending notifications request with token:", token ? "YES" : "NO");
-
-      const res = await api.get(`/notifications/user/${uid}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {}
-      });
+      const res = await api.get(`/notifications/user/${uid}`);
       setNotifications(res.data);
       const unread = res.data.filter(n => !n.isRead).length;
       setUnreadCount(unread);
