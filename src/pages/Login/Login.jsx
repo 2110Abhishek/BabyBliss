@@ -30,7 +30,7 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     try {
       await loginWithGoogle();
-      // With signInWithRedirect, the page will navigate away.
+      navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
       alert('Google Login failed');

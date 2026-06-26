@@ -2,8 +2,7 @@ import React, { useContext, createContext, useEffect, useState } from "react";
 import api from '../api/api';
 import {
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signOut,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -23,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
-    return signInWithRedirect(auth, provider);
+    return signInWithPopup(auth, provider);
   };
 
   const loginWithEmail = (email, password) => {
@@ -87,12 +86,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Check for redirect result when the page loads
-    getRedirectResult(auth).catch((error) => {
-      console.error("Redirect Error:", error);
-      alert("Google Login failed: " + error.message);
-    });
-
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
