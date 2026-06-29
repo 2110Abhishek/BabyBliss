@@ -76,7 +76,9 @@ const OrderHistory = () => {
                             <div className="order-items-preview">
                                 {order.items.map((item, index) => (
                                     <div key={index} className="preview-item">
-                                        <img src={item.image} alt={item.name} loading="lazy" />
+                                        <Link to={`/product/${item.productId}`} title="Click to view product and leave a review">
+                                            <img src={item.image} alt={item.name} loading="lazy" />
+                                        </Link>
                                         <span>x{item.quantity}</span>
                                         <div className="item-variants" style={{ fontSize: '0.75rem', color: '#666' }}>
                                             {item.selectedSize && <span>{item.selectedSize} </span>}
